@@ -12,6 +12,8 @@ OrderMe/local_settings.py
 /.pnp
 .pnp.js
 
+frontend/.idea/
+frontend/node_modules/
 # testing
 /coverage
 
