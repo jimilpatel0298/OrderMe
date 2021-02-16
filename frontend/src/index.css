@@ -1,8 +1,6 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Raleway', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -10,4 +8,104 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat', sans-serif;
+}
+
+h1 {
+  font-size: 40px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 23px;
+  font-weight: 700;
+}
+h4 {
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+h5 {
+  font-size: 17px;
+  font-weight: 400;
+  margin-bottom: 5px;
+}
+p {
+  font-size: 11px;
+  margin-bottom: 5px;
+}
+
+.header {
+  margin: 0;
+  padding: 20px 20px;
+  display: inline-block;
+  box-shadow: 0 2px 5px 0 lightgrey;
+  width: 100%;
+  margin-bottom: 20px;
+  height: 70px;
+}
+.menu {
+  margin-bottom: 60px;
+}
+.item {
+  border-radius: 5px;
+  background-color: #fafafa;
+  padding: 15px 5px;
+  margin-bottom: 20px;
+}
+.item img {
+  width: 120px;
+  height: 100px;
+}
+.item .item-details {
+  padding-left: 15px;
+}
+.item .item-value {
+  margin-top: 8px;
+}
+.item .btn-item-add {
+  padding: 5px 30px;
+  font-size: 13px;
+}
+.item-value h5 {
+  margin-bottom: 0px;
+  padding: 5px 0;
+  font-weight: 500;
+  font-family: 'Lexend Mega', sans-serif;
+  letter-spacing: -1px;
+}
+.item-value h5 span {
+  font-family: 'Roboto', sans-serif;
+}
+.btn-view-cart {
+  box-shadow: 0 0 7px 0 grey;
+  width: 120px;
+}
+.modal.fade .modal-dialog {
+  transform: translate3d(0, 100vh, 0);
+}
+.modal.show .modal-dialog {
+  transform: translate3d(0, 55vh, 0);
+}
+.btn-add-to-cart {
+  width: 100%;
+}
+.input-group.quantity button {
+  padding: 0 10px;
+  margin: 0 i !important;
+  border: none;
+  border: 1px solid lightgray
+}
+.input-group.quantity .form-control {
+  height: calc(1em + 0.75em + 2px);
+  padding-left: 12px;
+  font-family: 'Roboto', sans-serif;
+  border: none;
+}
+.input-group.quantity {
+  width: 88px;
 }
