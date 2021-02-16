@@ -1,10 +1,48 @@
 from django.db import models
+import qrcode
+from io import BytesIO
+from django.core.files import File
+# from PIL import Image, ImageDraw
 
 # Create your models here.
 
 
+class QrCode(models.Model):
+    name = models.CharField(max_length=200)
+    qr_code = models.ImageField(upload_to='qr_code', blank=True)
+
+    def __str__(self):
+        return str(self.name)
+
+    def save(self, *args, **kwargs):
+        qr = qrcode.QRCode(version=1, box_size=50, border=2)
+        data = self.name
+        qr.add_data(data)
+        qr.make(fit=True)
+        img = qr.make_image(fill='black', back_color='white')
+
+        # qr_code_image = qrcode.make(self.name)
+        # canvas = Image.new('RGB', (290, 290), 'red')
+        # draw = ImageDraw.Draw(canvas)
+        # canvas.paste(qr_code_image)
+        # fname = f'qr_code-{self.name}.png'
+        # buffer = BytesIO()
+        # canvas.save(buffer, 'PNG')
+        # self.qr_code.save(fname, File(buffer), save=False)
+        # canvas.close()
+
+        fname = f'{self.name}_qrcode.png'
+        buffer = BytesIO()
+        img.save(buffer, 'PNG')
+        self.qr_code.save(fname, File(buffer), save=False)
+
+        # img.close()
+        super().save(*args, **kwargs)
+
+
 class Product(models.Model):
     name = models.CharField(max_length=200, null=True)
+    description = models.CharField(max_length=500, default='', null=True)
     price = models.DecimalField(max_digits=5, decimal_places=2, null=True)
     calories = models.DecimalField(max_digits=7, decimal_places=2, null=True)
     image = models.FileField(upload_to='image/', blank=True, null=True)
@@ -35,50 +73,13 @@ class Order(models.Model):
     def __str__(self):
         return str(self.id)
 
-    # @property
-    # def get_cart_total(self):
-    #     orderitems = self.orderitem_set.all()
-    #     total = sum([item.get_total for item in orderitems])
-    #     return total
-    #
-    # @property
-    # def coupon_amount(self):
-    #     if self.coupon is not None:
-    #         discount_percent = self.coupon.discount_percent
-    #     else:
-    #         discount_percent = 0
-    #
-    #     total = self.get_cart_total
-    #     coupon_amount_total = (discount_percent * total) / 100
-    #     return coupon_amount_total
-    #
-    # @property
-    # def get_cart_total_coupon(self):
-    #     if self.coupon is None:
-    #         total = self.get_cart_total
-    #         return total
-    #     else:
-    #         discount_percent = self.coupon.discount_percent
-    #         old_total = self.get_cart_total
-    #         total = old_total - (discount_percent * old_total) / 100
-    #         return total
-    #
-    # @property
-    # def get_cart_items(self):
-    #     orderitems = self.orderitem_set.all()
-    #     total = sum(item.quantity for item in orderitems)
-    #     return total
-
 
 class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
     order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True, blank=True)
+    bread = models.CharField(max_length=255, blank=True, null=True)
+    size = models.CharField(max_length=255, blank=True, null=True)
     quantity = models.IntegerField(default=0, null=True, blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
     created_at = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, editable=True, null=True, blank=True)
-
-    # @property
-    # def get_total(self):
-    #     total = self.product.price_usa * self.quantity
-    #     return total
