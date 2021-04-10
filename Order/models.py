@@ -40,12 +40,61 @@ class QrCode(models.Model):
         super().save(*args, **kwargs)
 
 
+class Category(models.Model):
+    type = models.CharField(max_length=200, null=True, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True, editable=True, null=True, blank=True)
+
+    def __str__(self):
+        return self.type
+
+
+    # @property
+    # def categories(self):
+    #     return self.product_set.all()
+
+
 class Product(models.Model):
+    category = models.ForeignKey(Category, related_name='products', on_delete=models.DO_NOTHING, null=True, blank=True)
     name = models.CharField(max_length=200, null=True)
-    description = models.CharField(max_length=500, default='', null=True)
-    price = models.DecimalField(max_digits=5, decimal_places=2, null=True)
-    calories = models.DecimalField(max_digits=7, decimal_places=2, null=True)
+    description = models.CharField(max_length=500, default='', null=True, blank=True)
+    # price = models.DecimalField(max_digits=5, decimal_places=0, null=True)
+    calories = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
     image = models.FileField(upload_to='image/', blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True, editable=True, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Size(models.Model):
+    product = models.ForeignKey(Product, related_name='size', on_delete=models.DO_NOTHING, null=True, blank=True)
+    name = models.CharField(max_length=200, null=True)
+    price = models.DecimalField(max_digits=5, decimal_places=0, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True, editable=True, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+
+class ProductSize(models.Model):
+    product = models.ForeignKey(Product, related_name='product_table', on_delete=models.DO_NOTHING, null=True, blank=True)
+    size = models.ForeignKey(Size, related_name='size_table', on_delete=models.DO_NOTHING, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True, editable=True, null=True, blank=True)
+
+    # def __unicode__(self):
+    #     return self.product
+
+
+class Addon(models.Model):
+    addon_product_size = models.ForeignKey(ProductSize, related_name='addon_product_size', on_delete=models.DO_NOTHING, null=True, blank=True)
+    addon_product = models.ForeignKey(Product, related_name='addon_product_items', on_delete=models.DO_NOTHING, null=True, blank=True)
+    addon_size = models.ForeignKey(Size, related_name='addons', on_delete=models.DO_NOTHING, null=True, blank=True)
+    name = models.CharField(max_length=200, null=True)
+    price = models.DecimalField(max_digits=5, decimal_places=0, null=True)
     created_at = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, editable=True, null=True, blank=True)
 
@@ -59,27 +108,27 @@ class Person(models.Model):
     updated_at = models.DateTimeField(auto_now=True, editable=True, null=True, blank=True)
 
 
-class Order(models.Model):
-    person = models.ForeignKey(Person, on_delete=models.CASCADE, null=True, blank=True)
-    date_order = models.DateTimeField(auto_now_add=True)
-    complete_status = models.BooleanField(default=False, null=True, blank=True)
-    paid = models.FloatField(null=True, blank=True)
-    total = models.FloatField(null=True, blank=True)
-    transaction_id = models.CharField(max_length=200, null=True)
-    # invoice = models.FileField(upload_to='invoices/', null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
-    updated_at = models.DateTimeField(auto_now=True, editable=True, null=True, blank=True)
-
-    def __str__(self):
-        return str(self.id)
-
-
-class OrderItem(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True, blank=True)
-    bread = models.CharField(max_length=255, blank=True, null=True)
-    size = models.CharField(max_length=255, blank=True, null=True)
-    quantity = models.IntegerField(default=0, null=True, blank=True)
-    date_added = models.DateTimeField(auto_now_add=True)
-    created_at = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
-    updated_at = models.DateTimeField(auto_now=True, editable=True, null=True, blank=True)
+# class Order(models.Model):
+#     person = models.ForeignKey(Person, on_delete=models.CASCADE, null=True, blank=True)
+#     date_order = models.DateTimeField(auto_now_add=True)
+#     complete_status = models.BooleanField(default=False, null=True, blank=True)
+#     paid = models.FloatField(null=True, blank=True)
+#     total = models.FloatField(null=True, blank=True)
+#     transaction_id = models.CharField(max_length=200, null=True)
+#     # invoice = models.FileField(upload_to='invoices/', null=True, blank=True)
+#     created_at = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
+#     updated_at = models.DateTimeField(auto_now=True, editable=True, null=True, blank=True)
+#
+#     def __str__(self):
+#         return str(self.id)
+#
+#
+# class OrderItem(models.Model):
+#     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
+#     order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True, blank=True)
+#     bread = models.CharField(max_length=255, blank=True, null=True)
+#     size = models.CharField(max_length=255, blank=True, null=True)
+#     quantity = models.IntegerField(default=0, null=True, blank=True)
+#     date_added = models.DateTimeField(auto_now_add=True)
+#     created_at = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
+#     updated_at = models.DateTimeField(auto_now=True, editable=True, null=True, blank=True)
