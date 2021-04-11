@@ -10,11 +10,11 @@ router.register("Product", Productsclass)
 
 urlpatterns = [
     path('', include(router.urls)),
-    # path('get_product', get_product, name='get_product'),
-    path('get_category', get_category, name='get_category'),
-    path('add_category', add_category, name='add_category'),
-    path('get_customs/<int:id>', get_customs, name='get_customs'),
-    path('get_addons/<int:size_id>', get_addons, name='get_addons'),
-    # path('post_method', post_method, name='post_method'),
+    # path('add_category', add_category, name='add_category'),
+    path('product_details', product_details, name='product_details'),       # Get the details of all product
+    path('get_sizes/<int:id>', get_sizes, name='get_sizes'),                # get all the sizes of a product
+    path('get_addons/<int:size_id>', get_addons, name='get_addons'),        # get all the addons of a particular size
+    path('place_order', place_order, name='place_order'),                   # place a new order
+    path('get_order_details/<int:order_id>', get_order_details, name='order_details'),
 
 ]
