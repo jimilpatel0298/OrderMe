@@ -26,7 +26,7 @@ SECRET_KEY = '=4^1o$=9-#!p4&n6!6q)#m$v)crood+h+hcll6tysoi@4gh7sy'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['bbe25bca15a0.ngrok.io', 'http://localhost:8000', 'http://localhost:3000', '127.0.0.1' ]
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
@@ -34,6 +34,8 @@ CORS_ALLOWED_ORIGINS = [
 
 
 # Application definition
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -47,8 +49,14 @@ INSTALLED_APPS = [
     'corsheaders',
 ]
 
+REST_FRAMEWORK = {
+    'COERCE_DECIMAL_TO_STRING': False,
+}
+
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -89,6 +97,14 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'djongo',
+#         'NAME': 'Orderme_db',
+#     }
+# }
+
 
 # AUTH_USER_MODEL = 'user.user'
 
