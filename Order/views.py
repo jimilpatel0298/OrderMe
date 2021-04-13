@@ -198,7 +198,7 @@ def get_lastest_order(requests):
         print('inside get_lastest_order')
         # StreamingHttpResponse.streaming_content = 'text/event-stream'
         # response = Response()
-        response = StreamingHttpResponse(stream, status=200)
+        response = StreamingHttpResponse(stream)
         # response['streaming_content'] = 'text/event-stream'
         response['Content-Type'] = 'text/event-stream'
         response['Cache-Control'] = 'no-cache'
