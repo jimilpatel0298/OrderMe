@@ -1,6 +1,38 @@
 from rest_framework import serializers
 from .models import *
 
+from django.core.serializers.json import Serializer
+from django.db.models import Manager
+
+# FYI: It can be any of the following as well:
+# from django.core.serializers.pyyaml import Serializer
+# from django.core.serializers.python import Serializer
+# from django.contrib.gis.serializers.geojson import Serializer
+
+JSON_ALLOWED_OBJECTS = (dict, list, tuple, str, int, bool)
+
+
+class CustomSerializer(Serializer):
+
+    def end_object(self, obj):
+        for field in self.selected_fields:
+            if field == 'pk':
+                continue
+            elif field in self._current.keys():
+                continue
+            else:
+                try:
+                    self._current[field] = getattr(obj, field)()  # for model methods
+                    continue
+                except TypeError:
+                    pass
+                try:
+                    self._current[field] = getattr(obj, field)  # for property methods
+                    continue
+                except AttributeError:
+                    pass
+        super(CustomSerializer, self).end_object(obj)
+
 
 class ProductSerializer(serializers.ModelSerializer):
     # category = CategorySerializer()
@@ -18,7 +50,7 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         # ordering = ["category"]
-        fields = ("id", "name", "image", "description", )
+        fields = ("id", "name", "price", "image", "description",)
         # depth = 3
 
 
@@ -28,29 +60,6 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ("type", "products")
-
-
-class AddCategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = '__all__'
-
-
-class ProductSizeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProductSize
-        fields = ("product", "size")
-
-
-class AddonSerializer(serializers.ModelSerializer):
-    # size_table = serializers.ReadOnlyField(source="addon_product_size.size_table", read_only=True, )
-    # addon_size = serializers.ReadOnlyField(source="size.size_name", read_only=True, )
-
-    class Meta:
-        model = Addon
-        # fields = ("addon_size", "id", "addon_name", "price", )
-        fields = ("id", "name", "price", )
-        # fields = '__all__'
 
 
 class SizeSerializer(serializers.ModelSerializer):
@@ -63,21 +72,9 @@ class SizeSerializer(serializers.ModelSerializer):
         # fields = '__all__'
 
 
-class CustomizationSerializer(serializers.ModelSerializer):
-    products = ProductSerializer(many=True, read_only=True)
-    sizes = SizeSerializer(many=True, read_only=True)
-    addons = AddonSerializer(many=True, read_only=True)
-    productsize = ProductSizeSerializer(many=True, read_only=True)
-    name = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all())
-    # size_name = serializers.PrimaryKeyRelatedField(queryset=Size.objects.all())
-
-    class Meta:
-        model = ProductSize
-        fields = ("id", "productsize", "sizes", "products", "addons", "name",)
-
-
-class ProductCustomizationSerializer(serializers.ModelSerializer):
+class GetSizeSerializer(serializers.ModelSerializer):
     size = SizeSerializer(many=True, read_only=True)
+
     # addon_product_items = AddonSerializer(many=True, read_only=True)
     # product_table = ProductSizeSerializer(many=True, read_only=True)
     # addon_size = serializers.ReadOnlyField(source="size.size_name", read_only=True, )
@@ -91,10 +88,102 @@ class ProductCustomizationSerializer(serializers.ModelSerializer):
         # fields = '__all__'
 
 
+class AddonSerializer(serializers.ModelSerializer):
+    # size_table = serializers.ReadOnlyField(source="addon_product_size.size_table", read_only=True, )
+    # addon_size = serializers.ReadOnlyField(source="size.size_name", read_only=True, )
+
+    class Meta:
+        model = Addon
+        # fields = ("addon_size", "id", "addon_name", "price", )
+        fields = ("id", "name", "price",)
+        # fields = '__all__'
+
+
 class GetAddonsSerializer(serializers.ModelSerializer):
     addons = AddonSerializer(many=True, read_only=True)
 
     class Meta:
         model = Size
-        fields = ("id", "name", "addons", )
+        fields = ("id", "name", "addons",)
         # fields = "__all__"
+
+
+# class AddCategorySerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Category
+#         fields = '__all__'
+
+# class POSTSizeSerializer(serializers.ModelSerializer):
+#     # items = serializers.ReadOnlyField(source="size.name", read_only=True, )
+#     # items = AddonSerializer(many=True, read_only=True)
+#
+#     class Meta:
+#         model = Size
+#         fields = ("id", "name", "price",)
+#         # fields = '__all__'
+#
+#
+# class POSTCategorySerializer(serializers.ModelSerializer):
+#     products = ProductSerializer(many=True, read_only=True)
+#     products = ProductSerializer(many=True, read_only=True)
+#
+#     class Meta:
+#         model = Category
+#         fields = ("type", "products")
+# def create(self, validated_data):
+#     tracks_data = validated_data.pop('tracks')
+#     album = Album.objects.create(**validated_data)
+#     for track_data in tracks_data:
+#         Track.objects.create(album=album, **track_data)
+#     return album
+
+
+class AddonOrderItemSerializer(serializers.ModelSerializer):
+    name = serializers.ReadOnlyField(source="addon.name", read_only=True, )
+    price = serializers.ReadOnlyField(source="addon.price", read_only=True, )
+
+    class Meta:
+        model = AddonOrderItem
+        fields = ('id', 'addon', 'name', 'price',)
+        # fields = '__all__'
+
+
+class OrderItemSerializer(serializers.ModelSerializer):
+    item_addons = AddonOrderItemSerializer(many=True, read_only=True)
+    category = serializers.ReadOnlyField(source="category.type", read_only=True, )
+    name = serializers.ReadOnlyField(source="product.name", read_only=True,)
+    size_id = serializers.ReadOnlyField(source="size.id", read_only=True,)
+    size_name = serializers.ReadOnlyField(source="size.name", read_only=True,)
+    price = serializers.ReadOnlyField(source="size.price", read_only=True,)
+
+    class Meta:
+        model = OrderItem
+        fields = ('id', 'name', 'category', 'product', 'order', 'size_id', 'size_name', 'price', 'total', 'item_addons')
+        # fields = '__all__'
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    orderitems = OrderItemSerializer(many=True, read_only=True)
+    name = serializers.ReadOnlyField(source="product.name", read_only=True, )
+
+    class Meta:
+        model = Order
+        fields = ('id', 'name', 'status', 'paid', 'total', 'orderitems')
+        # fields = '__all__'
+
+
+class PersonSerializer(serializers.ModelSerializer):
+    order = OrderSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Person
+        fields = ('id', 'name', 'phone', 'order')
+        # fields = '__all__'
+
+
+class TempPersonSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Person
+        fields = ('id', 'name', 'phone')
+        # fields = '__all__'

@@ -48,7 +48,6 @@ class Category(models.Model):
     def __str__(self):
         return self.type
 
-
     # @property
     # def categories(self):
     #     return self.product_set.all()
@@ -58,7 +57,7 @@ class Product(models.Model):
     category = models.ForeignKey(Category, related_name='products', on_delete=models.DO_NOTHING, null=True, blank=True)
     name = models.CharField(max_length=200, null=True)
     description = models.CharField(max_length=500, default='', null=True, blank=True)
-    # price = models.DecimalField(max_digits=5, decimal_places=0, null=True)
+    price = models.DecimalField(max_digits=5, decimal_places=0, null=True)
     calories = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
     image = models.FileField(upload_to='image/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
@@ -102,33 +101,80 @@ class Addon(models.Model):
         return self.name
 
 
+class PersonManager(models.Manager):
+    def get_by_natural_key(self, id, name, phone):
+        return self.get(id=id, name=name, phone=phone)
+
+
 class Person(models.Model):
+    name = models.CharField(max_length=255, null=True, blank=True)
     phone = models.CharField(max_length=10, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, editable=True, null=True, blank=True)
 
+    objects = PersonManager()
 
-# class Order(models.Model):
-#     person = models.ForeignKey(Person, on_delete=models.CASCADE, null=True, blank=True)
-#     date_order = models.DateTimeField(auto_now_add=True)
-#     complete_status = models.BooleanField(default=False, null=True, blank=True)
-#     paid = models.FloatField(null=True, blank=True)
-#     total = models.FloatField(null=True, blank=True)
-#     transaction_id = models.CharField(max_length=200, null=True)
-#     # invoice = models.FileField(upload_to='invoices/', null=True, blank=True)
-#     created_at = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
-#     updated_at = models.DateTimeField(auto_now=True, editable=True, null=True, blank=True)
-#
-#     def __str__(self):
-#         return str(self.id)
-#
-#
-# class OrderItem(models.Model):
-#     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
-#     order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True, blank=True)
-#     bread = models.CharField(max_length=255, blank=True, null=True)
-#     size = models.CharField(max_length=255, blank=True, null=True)
-#     quantity = models.IntegerField(default=0, null=True, blank=True)
-#     date_added = models.DateTimeField(auto_now_add=True)
-#     created_at = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
-#     updated_at = models.DateTimeField(auto_now=True, editable=True, null=True, blank=True)
+    class Meta:
+        unique_together = [['id', 'name', 'phone']]
+
+    def natural_key(self):
+        return self.id, self.name, self.phone
+
+
+# class time
+#     order
+#     status
+#     created
+
+
+class Order(models.Model):
+
+    Paid = 'paid'
+    Cancelled = 'cancelled'
+    Dispatched = 'dispatched'
+    Tobepaid = 'tobepaid'
+
+    person = models.ForeignKey(Person, related_name='order', on_delete=models.DO_NOTHING, null=True, blank=True)
+    date_order = models.DateTimeField(auto_now_add=True)
+    complete_status = models.BooleanField(default=False, null=True, blank=True)
+    paid_status = models.BooleanField(default=False, null=True, blank=True)
+    dispatched_status = models.BooleanField(default=False, null=True, blank=True)
+    STATUS_CHOICES = (
+        (Paid, 'Paid'),               # ( value, human readable-name)
+        (Cancelled, 'Cancelled'),
+        (Dispatched, 'Dispatched'),
+        (Tobepaid, 'Tobepaid')
+    )
+    status = models.CharField(max_length=100, choices=STATUS_CHOICES, default=Tobepaid)
+    paid = models.FloatField(null=True, blank=True)
+    total = models.FloatField(null=True, blank=True)
+    # transaction_id = models.CharField(max_length=200, null=True)
+    # invoice = models.FileField(upload_to='invoices/', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True, editable=True, null=True, blank=True)
+
+    def __str__(self):
+        return str(self.id)
+
+    def natural_key(self):
+        return self.id, self.person.natural_key(), self.status, self.paid, self.total
+
+
+class OrderItem(models.Model):
+    category = models.ForeignKey(Category, related_name='category', on_delete=models.DO_NOTHING, null=True, blank=True)
+    product = models.ForeignKey(Product, related_name='product_orderitem', on_delete=models.DO_NOTHING, null=True, blank=True)
+    order = models.ForeignKey(Order, related_name='orderitems', on_delete=models.DO_NOTHING, null=True, blank=True)
+    size = models.ForeignKey(Size,  related_name='item_size', on_delete=models.DO_NOTHING, null=True, blank=True)
+    # quantity = models.IntegerField(default=0, null=True, blank=True)
+    total = models.FloatField(null=True, blank=True)
+    date_added = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True, editable=True, null=True, blank=True)
+
+
+class AddonOrderItem(models.Model):
+    orderitem = models.ForeignKey(OrderItem, related_name='item_addons', on_delete=models.DO_NOTHING, null=True, blank=True)
+    addon = models.ForeignKey(Addon, related_name='addon_addon_order_item', on_delete=models.DO_NOTHING, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True, editable=True, null=True, blank=True)
+
