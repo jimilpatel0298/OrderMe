@@ -1,6 +1,8 @@
 import json
+import time
 
-from django.http import HttpResponse
+from django.core.serializers.json import DjangoJSONEncoder
+from django.http import HttpResponse, StreamingHttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
 from .models import *
 from .serializers import *
@@ -106,7 +108,9 @@ def place_order(request):
             order.save()
 
             for item in request.data['cartItems']:
+                category = Category.objects.get(type=item['category'])
                 orderitem = OrderItem.objects.create(
+                    category=category,
                     product_id=item['id'],
                     order_id=order.id,
                     size_id=item['size']['id'],
@@ -117,7 +121,7 @@ def place_order(request):
                     for addon in item['addons']:
                         addon_obj = AddonOrderItem.objects.create(orderitem_id=orderitem.id, addon_id=addon['id'])
 
-            return Response(data={'message': 'Order Placed', 'Order id': order.id}, status=HTTP_201_CREATED)
+            return Response(data={'message': 'Order Placed', 'Order_id': order.id}, status=HTTP_201_CREATED)
 
         except Exception as e:
             print(str(e))
@@ -127,13 +131,78 @@ def place_order(request):
 
 
 @api_view(["GET"])
-def get_order_details(requests, order_id):
+def get_order_details(requests):
     try:
-        orders = Order.objects.get(id=order_id)
-        serializer = serializers.serialize('json', orders)
-        return HttpResponse(serializer, content_type="text/json-comment-filtered")
-        # return Response(data={"status": "Success", "message": "Addons found", "data":  serializer.data},
-        #                 status=HTTP_200_OK)
+        # orders = Order.objects.all()
+        # print(orders)
+        # order_serializer = serializers.serialize('json', orders, use_natural_foreign_keys=True,)
+        #
+        # order_item = OrderItem.objects.all()
+        # print(order_item)
+        # order_item_serializer = serializers.serialize('json', order_item, indent=2, use_natural_foreign_keys=True, use_natural_primary_keys=True,)
+        # print('order_item_serializer', order_item_serializer)
+
+        # all_serialized_objects = [order_serializer, order_item_serializer]
+        # print('serialized', all_serialized_objects)
+        # data = serializers.serialize('json', all_serialized_objects)
+        # print(data)
+
+        # all_objects = [*Order.objects.all(), *OrderItem.objects.all()]
+        # data = serializers.serialize('json', all_objects, use_natural_foreign_keys=True, use_natural_primary_keys=True,)
+
+        # serializers = CustomSerializer()
+        # queryset = Order.objects.all()
+        # data = serializers.serialize(queryset, fields=('id', 'person'))
+        #
+        # return HttpResponse(data, content_type="text/json-comment-filtered")
+
+        obj = Person.objects.all().order_by('-id')
+        serializer = PersonSerializer(obj, many=True)
+        return Response(data={"status": "Success", "message": "Addons found", "data":  serializer.data},
+                        status=HTTP_200_OK)
     except Exception as e:
         return Response(data={"status": "Error", "message": "Fetching Addons Failed", "data": {"errors": str(e)}},
                         status=HTTP_400_BAD_REQUEST)
+
+
+def event_stream():
+    initial_data = ''
+    try:
+        while True:
+            data = json.dumps(list(Person.objects.order_by('-id').values('name', 'phone')))
+            # print(data)
+            # serializer = TempPersonSerializer(obj)
+            # data = obj
+            # print('till here')
+
+            if not initial_data == data:
+                yield "\ndata: {}\n\n".format(data)
+                # yield '{} <br /> {}'.format(data, ' ' * 1024)
+                initial_data = data
+            time.sleep(1)
+
+    except Exception as e:
+        print(str(e))
+
+
+@api_view(["GET"])
+def get_lastest_order(requests):
+    try:
+        stream = event_stream()
+        # response = StreamingHttpResponse(event_stream())
+        # response['Content-Type'] = 'text/event-stream'
+        # response['Access-Control-Allow-Origin'] = "*"
+        # print(JSON.parse(response))
+        # return response
+        # print(StreamingHttpResponse(event_stream(), content_type='text/event-stream'))
+        print('inside get_lastest_order')
+        # StreamingHttpResponse.streaming_content = 'text/event-stream'
+        # response = Response()
+        response = StreamingHttpResponse(stream, status=200)
+        # response['streaming_content'] = 'text/event-stream'
+        response['Content-Type'] = 'text/event-stream'
+        response['Cache-Control'] = 'no-cache'
+        return response
+    except Exception as e:
+        response = HttpResponseBadRequest('Invalid request: %s.\n' % str(e))
+        return response
