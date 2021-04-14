@@ -1,0 +1,33 @@
+.item {
+    border-radius: 5px;
+    background-color: #fafafa;
+    padding: 15px 5px;
+    margin-bottom: 20px;
+}
+
+.item img {
+    width: 120px;
+    height: 100px;
+}
+
+.item .item-details {
+    padding-left: 15px;
+}
+
+.item .item-value {
+    margin-top: 8px;
+}
+
+.item .btn-item-add {
+    padding: 5px 30px;
+    font-size: 13px;
+}
+
+.rupee {
+    font-family: 'Roboto', sans-serif;
+}
+
+.btn-view-cart {
+    box-shadow: 0 0 7px 0 grey;
+    width: 120px;
+}

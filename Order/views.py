@@ -169,12 +169,10 @@ def event_stream():
     initial_data = ''
     try:
         while True:
-            data = json.dumps(list(Person.objects.order_by('-id').values('name', 'phone')))
-            # print(data)
-            # serializer = TempPersonSerializer(obj)
-            # data = obj
-            # print('till here')
-
+            obj = Person.objects.last()
+            serializer = TempPersonSerializer(obj)
+            data = serializer.data
+            print(data)
             if not initial_data == data:
                 yield "\ndata: {}\n\n".format(data)
                 # yield '{} <br /> {}'.format(data, ' ' * 1024)
@@ -183,6 +181,12 @@ def event_stream():
 
     except Exception as e:
         print(str(e))
+
+
+def add_category(request):
+    response = StreamingHttpResponse(event_stream())
+    response['Content-Type'] = 'text/event-stream'
+    return response
 
 
 @api_view(["GET"])
@@ -200,9 +204,10 @@ def get_lastest_order(requests):
         # response = Response()
         response = StreamingHttpResponse(stream)
         # response['streaming_content'] = 'text/event-stream'
-        response['Content-Type'] = 'text/event-stream'
-        response['Cache-Control'] = 'no-cache'
+        response['Content-Type'] = 'text/html'
+        response['Allow-cors'] = 'no-cache'
         return response
     except Exception as e:
         response = HttpResponseBadRequest('Invalid request: %s.\n' % str(e))
         return response
+

@@ -1,0 +1,96 @@
+body {
+    margin: 0;
+    font-family: 'Raleway', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Montserrat', sans-serif;
+    text-transform: capitalize;
+}
+
+h1 {
+    font-size: 40px;
+}
+
+h2 {
+    font-size: 30px;
+}
+
+h3 {
+    font-size: 23px;
+    font-weight: 700;
+}
+
+h4 {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+h5 {
+    font-size: 17px;
+    font-weight: 400;
+    margin-bottom: 5px;
+}
+
+p {
+    font-size: 11px;
+    margin-bottom: 5px;
+}
+
+main {
+    min-height: 80vh;
+}
+
+.rupee {
+    font-family: 'Roboto', sans-serif;
+}
+
+.span-price {
+    font-family: 'Lato', sans-serif;
+}
+
+.price {
+    margin-bottom: 0px;
+    padding: 5px 0;
+    font-weight: 400;
+    font-family: 'Lato', sans-serif;
+    letter-spacing: 1px;
+}
+
+.uppercase {
+    text-transform: 'uppercase';
+}
+
+.category {
+    text-transform: capitalize;
+    font-style: italic;
+    margin-bottom: 0px !important;
+}
+
+@media only screen and (max-width: 480px) {
+    .Toastify__toast { 
+        /* width: 250px; */
+        min-height: 0px !important;
+        margin: 15px !important;
+    }
+}
+
+.view-cart{
+    position: fixed;
+    bottom: 20px;
+    left: 25px;
+    text-shadow: 1px 1px 10px rgb(70, 70, 70);
+    z-index: 100;
+}
