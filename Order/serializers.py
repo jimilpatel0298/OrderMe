@@ -180,10 +180,3 @@ class PersonSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'phone', 'order')
         # fields = '__all__'
 
-
-class TempPersonSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Person
-        fields = ('id', 'name', 'phone')
-        # fields = '__all__'

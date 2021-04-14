@@ -169,15 +169,11 @@ def event_stream():
     initial_data = ''
     try:
         while True:
-            data = json.dumps(list(Person.objects.order_by('-id').values('name', 'phone')))
-            # print(data)
-            # serializer = TempPersonSerializer(obj)
-            # data = obj
-            # print('till here')
+            serializer = PersonSerializer(Person.objects.last())
+            data = serializer.data
 
             if not initial_data == data:
                 yield "\ndata: {}\n\n".format(data)
-                # yield '{} <br /> {}'.format(data, ' ' * 1024)
                 initial_data = data
             time.sleep(1)
 
@@ -185,21 +181,17 @@ def event_stream():
         print(str(e))
 
 
-@api_view(["GET"])
-def get_lastest_order(requests):
+def get_latest_order(requests):
     try:
-        stream = event_stream()
         # response = StreamingHttpResponse(event_stream())
         # response['Content-Type'] = 'text/event-stream'
         # response['Access-Control-Allow-Origin'] = "*"
         # print(JSON.parse(response))
         # return response
         # print(StreamingHttpResponse(event_stream(), content_type='text/event-stream'))
-        print('inside get_lastest_order')
         # StreamingHttpResponse.streaming_content = 'text/event-stream'
         # response = Response()
-        response = StreamingHttpResponse(stream, status=200)
-        # response['streaming_content'] = 'text/event-stream'
+        response = StreamingHttpResponse(event_stream(), status=200)
         response['Content-Type'] = 'text/event-stream'
         response['Cache-Control'] = 'no-cache'
         return response
