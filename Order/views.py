@@ -198,3 +198,4 @@ def get_latest_order(requests):
     except Exception as e:
         response = HttpResponseBadRequest('Invalid request: %s.\n' % str(e))
         return response
+

@@ -1,0 +1,33 @@
+.cart-hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    background-color: #181717;
+}
+
+.cart-div {
+    margin-bottom: 1rem;
+    background-color: #fafafa;
+    border-radius: 7px;
+    padding: 15px 10px;
+}
+
+.view-menu-btn-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.view-menu-btn {
+    width: 200px;
+    display: flex;
+    background-color: white;
+    border-radius: 5px;
+    height: 30px;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    font-weight: 500;
+    font-size: 13px;
+    padding: 20px;
+    border: 1px solid #EFBBB9;
+}
