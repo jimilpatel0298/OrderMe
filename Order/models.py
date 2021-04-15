@@ -70,7 +70,7 @@ class Product(models.Model):
 class Size(models.Model):
     product = models.ForeignKey(Product, related_name='size', on_delete=models.DO_NOTHING, null=True, blank=True)
     name = models.CharField(max_length=200, null=True)
-    price = models.DecimalField(max_digits=5, decimal_places=0, null=True)
+    price = models.FloatField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, editable=True, null=True, blank=True)
 
@@ -93,7 +93,7 @@ class Addon(models.Model):
     addon_product = models.ForeignKey(Product, related_name='addon_product_items', on_delete=models.DO_NOTHING, null=True, blank=True)
     addon_size = models.ForeignKey(Size, related_name='addons', on_delete=models.DO_NOTHING, null=True, blank=True)
     name = models.CharField(max_length=200, null=True)
-    price = models.DecimalField(max_digits=5, decimal_places=0, null=True)
+    price = models.FloatField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, editable=True, null=True, blank=True)
 

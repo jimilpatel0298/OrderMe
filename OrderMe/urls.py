@@ -26,7 +26,6 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name='index.html')),
     path('manage', TemplateView.as_view(template_name='index.html')),
     path('api/', include('Order.urls')),
-    path('post/', add_category)
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
