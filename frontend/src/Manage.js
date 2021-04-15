@@ -13,177 +13,177 @@ import { ToastContainer, toast, Bounce } from 'react-toastify';
 class Manage extends Component {
     state = {
         orders: [
-            {
-                contactDetails: {
-                    id: 12,
-                    name: 'Jimil Patel',
-                    phone: "7567438095"
-                },
-                order: {
-                    id: 14,
-                    status: 'tobepaid',
-                    paid: 160.0,
-                    total: 160.0,
-                },
-                orderItems: [
-                    {
-                        id: 8,
-                        name: "Farm Fresh",
-                        category: 'bread pizza',
-                        product: 1,
-                        order: 14,
-                        total: 160.0,
-                        itemSize: {
-                            id: 2,
-                            name: 'jumbo',
-                            price: 150.0
-                        },
-                        itemAddons: [
-                            {
-                                id: 6,
-                                addon: 1,
-                                name: "extra toppings",
-                                price: 10.0
-                            }
-                        ]
-                    },
-                    {
-                        id: 9,
-                        name: "Farm Fresh",
-                        category: 'bread pizza',
-                        product: 1,
-                        order: 14,
-                        total: 160.0,
-                        itemSize: {
-                            id: 2,
-                            name: 'jumbo',
-                            price: 150.0
-                        },
-                        itemAddons: [
-                            {
-                                id: 6,
-                                addon: 1,
-                                name: "extra toppings",
-                                price: 10.0
-                            }
-                        ]
-                    },
-                ]
-            },
-            {
-                contactDetails: {
-                    id: 12,
-                    name: 'Jimil Patel',
-                    phone: "7567438095"
-                },
-                order: {
-                    id: 14,
-                    status: 'paid',
-                    paid: 160.0,
-                    total: 160.0,
-                },
-                orderItems: [
-                    {
-                        id: 8,
-                        name: "Farm Fresh",
-                        category: 'bread pizza',
-                        product: 1,
-                        order: 14,
-                        total: 160.0,
-                        itemSize: {
-                            id: 2,
-                            name: 'jumbo',
-                            price: 150.0
-                        },
-                        itemAddons: [
-                            {
-                                id: 6,
-                                addon: 1,
-                                name: "extra toppings",
-                                price: 10.0
-                            }
-                        ]
-                    },
-                    {
-                        id: 9,
-                        name: "Farm Fresh",
-                        category: 'bread pizza',
-                        product: 1,
-                        order: 14,
-                        total: 160.0,
-                        itemSize: {
-                            id: 2,
-                            name: 'jumbo',
-                            price: 150.0
-                        },
-                        itemAddons: [
-                            {
-                                id: 6,
-                                addon: 1,
-                                name: "extra toppings",
-                                price: 10.0
-                            }
-                        ]
-                    },
-                ]
-            },
-            {
-                contactDetails: {
-                    id: 12,
-                    name: 'Jimil Patel',
-                    phone: "7567438095"
-                },
-                order: {
-                    id: 14,
-                    status: 'prepared',
-                    paid: 160.0,
-                    total: 160.0,
-                },
-                orderItems: [
-                    {
-                        id: 8,
-                        name: "Farm Fresh",
-                        category: 'bread pizza',
-                        product: 1,
-                        order: 14,
-                        total: 160.0,
-                        itemSize: {
-                            id: 2,
-                            name: 'jumbo',
-                            price: 150.0
-                        },
-                        itemAddons: [
-                            {
-                                id: 6,
-                                addon: 1,
-                                name: "extra toppings",
-                                price: 10.0
-                            }
-                        ]
-                    },
-                    {
-                        id: 9,
-                        name: "Farm Fresh",
-                        category: 'bread pizza',
-                        product: 1,
-                        order: 14,
-                        total: 160.0,
-                        itemSize: {
-                            id: 2,
-                            name: 'jumbo',
-                            price: 150.0
-                        },
-                        itemAddons: [
-                            {
-                                id: 6,
-                                addon: 1,
-                                name: "extra toppings",
-                                price: 10.0
-                            }
-                        ]
-                    },
-                ]
-            },
+            // {
+            //     contactDetails: {
+            //         id: 12,
+            //         name: 'Jimil Patel',
+            //         phone: "7567438095"
+            //     },
+            //     order: {
+            //         id: 14,
+            //         status: 'tobepaid',
+            //         paid: 160.0,
+            //         total: 160.0,
+            //     },
+            //     orderItems: [
+            //         {
+            //             id: 8,
+            //             name: "Farm Fresh",
+            //             category: 'bread pizza',
+            //             product: 1,
+            //             order: 14,
+            //             total: 160.0,
+            //             itemSize: {
+            //                 id: 2,
+            //                 name: 'jumbo',
+            //                 price: 150.0
+            //             },
+            //             itemAddons: [
+            //                 {
+            //                     id: 6,
+            //                     addon: 1,
+            //                     name: "extra toppings",
+            //                     price: 10.0
+            //                 }
+            //             ]
+            //         },
+            //         {
+            //             id: 9,
+            //             name: "Farm Fresh",
+            //             category: 'bread pizza',
+            //             product: 1,
+            //             order: 14,
+            //             total: 160.0,
+            //             itemSize: {
+            //                 id: 2,
+            //                 name: 'jumbo',
+            //                 price: 150.0
+            //             },
+            //             itemAddons: [
+            //                 {
+            //                     id: 6,
+            //                     addon: 1,
+            //                     name: "extra toppings",
+            //                     price: 10.0
+            //                 }
+            //             ]
+            //         },
+            //     ]
+            // },
+            // {
+            //     contactDetails: {
+            //         id: 12,
+            //         name: 'Jimil Patel',
+            //         phone: "7567438095"
+            //     },
+            //     order: {
+            //         id: 14,
+            //         status: 'paid',
+            //         paid: 160.0,
+            //         total: 160.0,
+            //     },
+            //     orderItems: [
+            //         {
+            //             id: 8,
+            //             name: "Farm Fresh",
+            //             category: 'bread pizza',
+            //             product: 1,
+            //             order: 14,
+            //             total: 160.0,
+            //             itemSize: {
+            //                 id: 2,
+            //                 name: 'jumbo',
+            //                 price: 150.0
+            //             },
+            //             itemAddons: [
+            //                 {
+            //                     id: 6,
+            //                     addon: 1,
+            //                     name: "extra toppings",
+            //                     price: 10.0
+            //                 }
+            //             ]
+            //         },
+            //         {
+            //             id: 9,
+            //             name: "Farm Fresh",
+            //             category: 'bread pizza',
+            //             product: 1,
+            //             order: 14,
+            //             total: 160.0,
+            //             itemSize: {
+            //                 id: 2,
+            //                 name: 'jumbo',
+            //                 price: 150.0
+            //             },
+            //             itemAddons: [
+            //                 {
+            //                     id: 6,
+            //                     addon: 1,
+            //                     name: "extra toppings",
+            //                     price: 10.0
+            //                 }
+            //             ]
+            //         },
+            //     ]
+            // },
+            // {
+            //     contactDetails: {
+            //         id: 12,
+            //         name: 'Jimil Patel',
+            //         phone: "7567438095"
+            //     },
+            //     order: {
+            //         id: 14,
+            //         status: 'prepared',
+            //         paid: 160.0,
+            //         total: 160.0,
+            //     },
+            //     orderItems: [
+            //         {
+            //             id: 8,
+            //             name: "Farm Fresh",
+            //             category: 'bread pizza',
+            //             product: 1,
+            //             order: 14,
+            //             total: 160.0,
+            //             itemSize: {
+            //                 id: 2,
+            //                 name: 'jumbo',
+            //                 price: 150.0
+            //             },
+            //             itemAddons: [
+            //                 {
+            //                     id: 6,
+            //                     addon: 1,
+            //                     name: "extra toppings",
+            //                     price: 10.0
+            //                 }
+            //             ]
+            //         },
+            //         {
+            //             id: 9,
+            //             name: "Farm Fresh",
+            //             category: 'bread pizza',
+            //             product: 1,
+            //             order: 14,
+            //             total: 160.0,
+            //             itemSize: {
+            //                 id: 2,
+            //                 name: 'jumbo',
+            //                 price: 150.0
+            //             },
+            //             itemAddons: [
+            //                 {
+            //                     id: 6,
+            //                     addon: 1,
+            //                     name: "extra toppings",
+            //                     price: 10.0
+            //                 }
+            //             ]
+            //         },
+            //     ]
+            // },
         ],
         confirmation: false
     }
@@ -237,9 +237,16 @@ class Manage extends Component {
         return menu_items
     }
 
-    orderData = (response) => {
+    orderData = (response, single=false) => {
         let ordersTemp = [...this.state.orders]
-        let serverOrder = response.data.data
+        
+        if(single === true) {
+            let newOrder = {...response}
+            console.log(response)
+            ordersTemp.unshift(newOrder)
+
+        }else {
+        let serverOrder = response
         serverOrder.forEach(elementOrder => {
             let newOrder = {
                 contactDetails: {
@@ -281,21 +288,23 @@ class Manage extends Component {
             }
             ordersTemp.unshift(newOrder)
         });
+    }
         this.setState({ orders: ordersTemp })
     }
 
     fetchOrder = () => {
-        // axios.get('http://4f28bfb829e6.ngrok.io/api/get_order_details').then(response => {
+        // axios.get('http://localhost:8000/api/get_order_details').then(response => {
         //     if (response.data.data.length !== 0) {
-        //         this.orderData(response);
+        //         this.orderData(response.data.data);
         //     }
         // }).catch(error => {
         //     toast.error('Could not connect to server. Please try again later.')
         // })
-        console.log('inside fetchorder')
-        let source = new EventSource("http://localhost:8000/post/");
+
+        let source = new EventSource("http://localhost:8000/api/get_latest_order");
         source.onmessage = e => {
-            console.log(e.data)
+            console.log('inside message')
+            this.orderData(JSON.parse(e.data), true)
         }
         source.onerror = e => {
             console.log('inside error')

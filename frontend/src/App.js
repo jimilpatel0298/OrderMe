@@ -57,7 +57,7 @@ function App(props) {
       }
     }
 
-    axios.post(`http://bbe25bca15a0.ngrok.io/api/place_order`, data).then(response => {
+    axios.post(`http://abad4ff5210e.ngrok.io/api/place_order`, data).then(response => {
       console.log(response.data.data.order_id)
       orderId = response.data.data.order_id
       console.log('inside then')
