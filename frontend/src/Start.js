@@ -16,6 +16,14 @@ const Start = () => {
         }
     }
 
+    let component = () => {
+        if(isAuthenticated === true) {
+            return <Manage />
+        } else {
+            return <Auth pinSubmit={pinSubmit} />
+        }
+    }
+
     axios.defaults.baseURL = 'http://localhost:8000/api/';
 
     return (
@@ -23,7 +31,7 @@ const Start = () => {
             <BrowserRouter>
                 <Switch>
                     <Route path='/manage' exact>
-                        {isAuthenticated ? <Manage />: <Auth pinSubmit={pinSubmit}/>}
+                        {component()}
                     </Route>
                     <Route path='/'>
                         <App />

@@ -148,7 +148,7 @@ def get_order_details(requests):
         #
         # return HttpResponse(data, content_type="text/json-comment-filtered")
 
-        obj = Person.objects.all()
+        obj = Person.objects.exclude(order__status='dispatched').exclude(order__status='cancelled')
         serializer = PersonSerializer(obj, many=True)
         return Response(data={"status": "Success", "message": "Addons found", "data":  serializer.data},
                         status=HTTP_200_OK)
@@ -161,58 +161,58 @@ def event_stream():
     initial_data = ''
     try:
         while True:
-            def f():
-                def toDict(obj):
-                    return model_to_dict(obj)
+            def toDict(obj):
+                return model_to_dict(obj)
 
-                dataObj = {
-                    'contactDetails': {},
-                    'order': {},
-                    'orderItems': []
-                }
-                newOrder = Order.objects.last().id
-                orderObj = Order.objects.get(id=newOrder)
-                personObj = Person.objects.get(id=orderObj.person.id)
-                orderItems = OrderItem.objects.filter(order=orderObj)
+            dataObj = {
+                'contactDetails': {},
+                'order': {},
+                'orderItems': []
+            }
+            newOrder = Order.objects.last().id
+            orderObj = Order.objects.get(id=newOrder)
+            personObj = Person.objects.get(id=orderObj.person.id)
+            orderItems = OrderItem.objects.filter(order=orderObj)
 
-                dataObj['contactDetails'] = toDict(personObj)
-                dataObj['order'] = {
-                    'id': orderObj.id,
-                    'status': orderObj.status,
-                    'paid': orderObj.paid,
-                    'total': orderObj.total
+            dataObj['contactDetails'] = toDict(personObj)
+            dataObj['order'] = {
+                'id': orderObj.id,
+                'status': orderObj.status,
+                'paid': orderObj.paid,
+                'total': orderObj.total
+            }
+            for order_item in orderItems:
+                temp_obj = {
+                    'id': order_item.id,
+                    'name': order_item.product.name,
+                    'category': order_item.category.type,
+                    'product': order_item.product.id,
+                    'order': orderObj.id,
+                    'total': order_item.total,
+                    'itemSize': {
+                        'id': order_item.size.id,
+                        'name': order_item.size.name,
+                        'price': order_item.size.price
+                    },
+                    'itemAddons': []
                 }
-                for order_item in orderItems:
-                    temp_obj = {
-                        'id': order_item.id,
-                        'name': order_item.product.name,
-                        'category': order_item.category.type,
-                        'product': order_item.product.id,
-                        'order': orderObj.id,
-                        'total': order_item.total,
-                        'itemSize': {
-                            'id': order_item.size.id,
-                            'name': order_item.size.name,
-                            'price': order_item.size.price
-                        },
-                        'itemAddons': []
+                itemAddons = AddonOrderItem.objects.filter(orderitem=order_item)
+                for item_addon in itemAddons:
+                    temp_addon = {
+                        'id': item_addon.id,
+                        'addon': item_addon.addon.id,
+                        'name': item_addon.addon.name,
+                        'price': item_addon.addon.price
                     }
-                    itemAddons = AddonOrderItem.objects.filter(orderitem=order_item)
-                    for item_addon in itemAddons:
-                        temp_addon = {
-                            'id': item_addon.id,
-                            'addon': item_addon.addon.id,
-                            'name': item_addon.addon.name,
-                            'price': item_addon.addon.price
-                        }
-                        temp_obj['itemAddons'].append(temp_addon)
-                    dataObj['orderItems'].append(temp_obj)
+                    temp_obj['itemAddons'].append(temp_addon)
+                dataObj['orderItems'].append(temp_obj)
 
-                json_string = json.dumps(dataObj)
-                print(dataObj)
-                return json_string
+            if dataObj['order']['status'] == 'paid' or dataObj['order']['status'] == 'cancelled' or dataObj['order']['status'] == 'dispatched':
+                continue
 
-            data = f()
+            json_string = json.dumps(dataObj)
+            data = json_string
+            print(data)
 
             if not initial_data == data:
                 yield "\ndata: {}\n\n".format(data)
@@ -252,8 +252,13 @@ def update_order_status(request, order_id):
             if request.data['status'] == 'paid':
                 order.paid_status = True
                 order.save()
-            elif request.data['status'] == 'tobepaid':
+            elif request.data['status'] == 'cancelled':
                 order.paid_status = False
                 order.save()
-            return Response(data={'message': 'Status Updated!', 'Order': serializer.data}, status=HTTP_200_OK)
+            elif request.data['status'] == 'dispatched':
+                order.paid_status = True
+                order.complete_status = True
+                order.dispatched_status = True
+                order.save()
+            return Response(data={'message': 'Status Updated!', 'order': serializer.data}, status=HTTP_200_OK)
 
