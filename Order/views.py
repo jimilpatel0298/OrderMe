@@ -2,7 +2,7 @@ import json
 import time
 
 from django.core.serializers.json import DjangoJSONEncoder
-from django.http import HttpResponse, StreamingHttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, StreamingHttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render
 from .models import *
 from .serializers import *
@@ -156,8 +156,9 @@ def get_order_details(requests):
         #
         # return HttpResponse(data, content_type="text/json-comment-filtered")
 
-        obj = Person.objects.all().order_by('-id')
+        obj = Person.objects.all()
         serializer = PersonSerializer(obj, many=True)
+        # print(serializer.data)
         return Response(data={"status": "Success", "message": "Addons found", "data":  serializer.data},
                         status=HTTP_200_OK)
     except Exception as e:
@@ -169,8 +170,56 @@ def event_stream():
     initial_data = ''
     try:
         while True:
-            serializer = PersonSerializer(Person.objects.last())
-            data = serializer.data
+            # serializer = PersonSerializer(Person.objects.last())
+            # data = serializer.data
+
+            def view():
+                person = Person.objects.last()
+                order = Order.objects.filter(person=person)
+                return JsonResponse(order, safe=False)
+            data = view()
+            print(data)
+            # data: {
+            #     "id": 10,
+            #     "name": "Jimil Patel",
+            #     "phone": "7567438095",
+            #     "order": [
+            #         {
+            #             "id": 10,
+            #             "status": "tobepaid",
+            #             "paid": 110.0,
+            #             "total": 110.0,
+            #             "orderitems": [
+            #                 {
+            #                     "id": 10,
+            #                     "name": "Aloo Masala",
+            #                     "category": "sandwiches",
+            #                     "product": 1,
+            #                     "order": 10,
+            #                     "size_id": 1,
+            #                     "size_name": "regular",
+            #                     "price": "100",
+            #                     "total": 110.0,
+            #                     "item_addons": [
+            #                         {
+            #                             "id": 11,
+            #                             "addon": 1,
+            #                             "name": "extra cheese",
+            #                             "price": "10"
+            #                         }
+            #                     ]
+            #                 }
+            #             ]
+            #         }
+            #     ]
+            # }
+
+            # data = serializers.serialize('json', Person.objects.all())
+            # print(datajson)
+            # print(serializer.data)
+            # print(data)
+            # data_json = json.dumps(data, indent=4, cls=DjangoJSONEncoder)
+            # print(data_json)
 
             if not initial_data == data:
                 yield "\ndata: {}\n\n".format(data)
@@ -193,6 +242,7 @@ def get_latest_order(requests):
         # response = Response()
         response = StreamingHttpResponse(event_stream(), status=200)
         response['Content-Type'] = 'text/event-stream'
+        # response['Content-Type'] = 'application/json'
         response['Cache-Control'] = 'no-cache'
         return response
     except Exception as e:
