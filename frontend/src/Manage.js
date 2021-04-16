@@ -185,7 +185,7 @@ class Manage extends Component {
             //     ]
             // },
         ],
-        confirmation: false
+        confirmation: false,
     }
 
     paidHandler = (event, props) => {
@@ -242,7 +242,6 @@ class Manage extends Component {
         
         if(single === true) {
             let newOrder = {...response}
-            console.log(response)
             ordersTemp.unshift(newOrder)
 
         }else {
@@ -292,19 +291,23 @@ class Manage extends Component {
         this.setState({ orders: ordersTemp })
     }
 
+    landed = false
+
     fetchOrder = () => {
-        // axios.get('http://localhost:8000/api/get_order_details').then(response => {
-        //     if (response.data.data.length !== 0) {
-        //         this.orderData(response.data.data);
-        //     }
-        // }).catch(error => {
-        //     toast.error('Could not connect to server. Please try again later.')
-        // })
+        axios.get('get_order_details').then(response => {
+            if (response.data.data.length !== 0) {
+                this.orderData(response.data.data);
+            }
+        }).catch(error => {
+            toast.error('Could not connect to server. Please try again later.')
+        })
 
         let source = new EventSource("http://localhost:8000/api/get_latest_order");
         source.onmessage = e => {
-            console.log('inside message')
-            this.orderData(JSON.parse(e.data), true)
+            if (this.landed === true) {
+                this.orderData(JSON.parse(e.data), true)
+            }
+            this.landed = true
         }
         source.onerror = e => {
             console.log('inside error')

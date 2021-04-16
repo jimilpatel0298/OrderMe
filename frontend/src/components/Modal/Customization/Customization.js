@@ -74,7 +74,7 @@ const Customization = (props) => {
     useEffect(() => {
         const arrayAddonsAPI = (data) => {
             const arrayAddonsApi = data.map(element => {
-                const addonsAPI = `http://abad4ff5210e.ngrok.io/api/get_addons/${element.id}`
+                const addonsAPI = `get_addons/${element.id}`
                 return axios.get(addonsAPI)
             })
             return arrayAddonsApi
@@ -83,7 +83,7 @@ const Customization = (props) => {
         const fetchData = () => {
             let itemDataTemp = null
     
-            const sizeAPI = `http://abad4ff5210e.ngrok.io/api/get_sizes/${props.modalInfo.id}`
+            const sizeAPI = `get_sizes/${props.modalInfo.id}`
     
             axios.get(sizeAPI).then(response => {
                 itemDataTemp = response.data.data
@@ -103,7 +103,7 @@ const Customization = (props) => {
                             selectedItemTemp.totalPrice = element.price
                             delete selectedItemTemp.size.addons
                             setItemAddOns(elementAddonsTemp)
-                            setSelectedItem(selectedItemTemp)
+                            setSelectedItem(selectedItemTemp)   
                         }
                         return null
                     })

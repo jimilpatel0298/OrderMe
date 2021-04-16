@@ -70,7 +70,7 @@ class Menu extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://abad4ff5210e.ngrok.io/api/menu')
+        axios.get('menu')
         .then(response => {
             let stateTemp = {...this.state}
             stateTemp.menuItems = response.data.data.menuItems
