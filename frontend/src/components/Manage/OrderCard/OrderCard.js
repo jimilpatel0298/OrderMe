@@ -47,8 +47,8 @@ const OrderCard = (props) => {
                                 )
                             } else if (props.order.order.status === 'paid') {
                                 return (<>
-                                    <Button variant="outline-secondary" id='cancel' onClick={(event) => props.statusHandler(event, props.order)}>Cancel</Button>
-                                    <Button variant="warning" id='preparing' disabled onClick={(event) => props.statusHandler(event, props.order)}>Preparing</Button>
+                                    <Button variant="outline-secondary" id='preparing' disabled onClick={(event) => props.statusHandler(event, props.order)}>Preparing</Button>
+                                    <Button variant="warning" id='prepared' onClick={(event) => props.statusHandler(event, props.order)}>Prepared</Button>
                                 </>
                                 )
                             } else if (props.order.order.status === 'prepared') {

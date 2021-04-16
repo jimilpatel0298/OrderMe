@@ -188,31 +188,57 @@ class Manage extends Component {
         confirmation: false,
     }
 
-    paidHandler = (event, props) => {
-        console.log('paid', event, props)
+    preparedHandler = (event, orderTemp1) => {
+        let ordersTemp = [...this.state.orders]
+        const elementIndex = this.state.orders.findIndex(element => element.order.id === orderTemp1.data.order.id)
+        ordersTemp[elementIndex].order.status = orderTemp1.messages.title.toLowerCase()
+        this.setState({ orders: ordersTemp, confirmation: false })
     }
-    cancelHandler = () => {
-        console.log('cancel')
-    }
-    dispatchedHandler = () => {
-        console.log('dispatch')
+
+    confirmHandler = (event, orderTemp) => {
+        let ordersTemp = [...this.state.orders]
+        const elementIndex = this.state.orders.findIndex(element => element.order.id === orderTemp.data.order.id)
+        ordersTemp[elementIndex].order.status = orderTemp.messages.title.toLowerCase()
+        
+        axios.put(`update_status/${orderTemp.data.order.id}`, {status: orderTemp.messages.title.toLowerCase()})
+        .then(response => {
+            console.log(response)
+            if(response.data.order.status === 'cancelled' || response.data.order.status === 'dispatched') {
+                ordersTemp.splice(elementIndex, 1)
+                this.setState({ orders: ordersTemp, confirmation: false })
+            } else {
+                this.setState({ orders: ordersTemp, confirmation: false })
+            }
+            toast.success('Changes pushed to server.')
+        }).catch(error => {
+            console.log(error)
+            toast.error('Could not connect to server. Please try again later.')
+        })
     }
 
     messages = {
         paid: {
             title: 'Paid',
             body: 'Are you sure you want to confirm as the order paid?',
-            button: this.paidHandler
+            button: this.confirmHandler
+
         },
         cancel: {
-            title: 'Cancel',
+            title: 'Cancelled',
             body: "Are you sure you want to cancel the order?",
-            button: this.cancelHandler
+            button: this.confirmHandler
+
         },
         dispatched: {
             title: 'Dispatched',
             body: "Are you sure you want to make the order dispatched?",
-            button: this.dispatchedHandler
+            button: this.confirmHandler
+
+        },
+        prepared: {
+            title: 'Prepared',
+            body: 'Are you sure you want to make the order prepared?',
+            button: this.preparedHandler
         }
     }
 
@@ -224,7 +250,9 @@ class Manage extends Component {
     statusHandler = (event, order) => {
         console.log(order)
         const button = event.target.id
-        this.modalInfo = this.messages[button]
+        this.modalInfo.messages = this.messages[button]
+        this.modalInfo.data = order
+        console.log(this.modalInfo)
         this.confirmationShow();
     }
 
@@ -237,57 +265,57 @@ class Manage extends Component {
         return menu_items
     }
 
-    orderData = (response, single=false) => {
+    orderData = (response, single = false) => {
         let ordersTemp = [...this.state.orders]
-        
-        if(single === true) {
-            let newOrder = {...response}
+
+        if (single === true) {
+            let newOrder = { ...response }
             ordersTemp.unshift(newOrder)
 
-        }else {
-        let serverOrder = response
-        serverOrder.forEach(elementOrder => {
-            let newOrder = {
-                contactDetails: {
-                    id: elementOrder.id,
-                    name: elementOrder.name,
-                    phone: elementOrder.phone
-                },
-                order: {
-                    id: elementOrder.order[0].id,
-                    status: elementOrder.order[0].status,
-                    paid: elementOrder.order[0].paid,
-                    total: elementOrder.order[0].total
-                },
-                orderItems: elementOrder.order[0].orderitems.map(elementOrderItem => {
-                    let orderItemTemp = {
-                        id: elementOrderItem.id,
-                        category: elementOrderItem.category,
-                        name: elementOrderItem.name,
-                        product: elementOrderItem.product,
-                        total: elementOrderItem.total,
-                        itemSize: {
-                            id: elementOrderItem.size_id,
-                            name: elementOrderItem.size_name,
-                            price: elementOrderItem.price
-                        },
-                        itemAddons: elementOrderItem.item_addons.map(elementOrderItemAddon => {
-                            let orderAddonTemp = {
-                                id: elementOrderItemAddon.id,
-                                addon: elementOrderItemAddon.addon,
-                                name: elementOrderItemAddon.name,
-                                price: elementOrderItemAddon.price
-                            }
-                            return orderAddonTemp
-                        })
-                    }
-                    return orderItemTemp
-                })
+        } else {
+            let serverOrder = response
+            serverOrder.forEach(elementOrder => {
+                let newOrder = {
+                    contactDetails: {
+                        id: elementOrder.id,
+                        name: elementOrder.name,
+                        phone: elementOrder.phone
+                    },
+                    order: {
+                        id: elementOrder.order[0].id,
+                        status: elementOrder.order[0].status,
+                        paid: elementOrder.order[0].paid,
+                        total: elementOrder.order[0].total
+                    },
+                    orderItems: elementOrder.order[0].orderitems.map(elementOrderItem => {
+                        let orderItemTemp = {
+                            id: elementOrderItem.id,
+                            category: elementOrderItem.category,
+                            name: elementOrderItem.name,
+                            product: elementOrderItem.product,
+                            total: elementOrderItem.total,
+                            itemSize: {
+                                id: elementOrderItem.size_id,
+                                name: elementOrderItem.size_name,
+                                price: elementOrderItem.price
+                            },
+                            itemAddons: elementOrderItem.item_addons.map(elementOrderItemAddon => {
+                                let orderAddonTemp = {
+                                    id: elementOrderItemAddon.id,
+                                    addon: elementOrderItemAddon.addon,
+                                    name: elementOrderItemAddon.name,
+                                    price: elementOrderItemAddon.price
+                                }
+                                return orderAddonTemp
+                            })
+                        }
+                        return orderItemTemp
+                    })
 
-            }
-            ordersTemp.unshift(newOrder)
-        });
-    }
+                }
+                ordersTemp.unshift(newOrder)
+            });
+        }
         this.setState({ orders: ordersTemp })
     }
 

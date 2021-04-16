@@ -10,16 +10,16 @@ const Confirmation = (props) => {
         keyboard={false}
       >
         <Modal.Header closeButton>
-          <Modal.Title>{props.modalInfo.title}</Modal.Title>
+          <Modal.Title>{props.modalInfo.messages.title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {props.modalInfo.body}
+          {props.modalInfo.messages.body}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={props.handleClose}>
             No
           </Button>
-          <Button variant="primary" onClick={(event) => props.modalInfo.button(event, props.modalInfo)}>Yes</Button>
+          <Button variant="primary" onClick={(event) => props.modalInfo.messages.button(event, props.modalInfo)}>Yes</Button>
         </Modal.Footer>
       </Modal>
     )

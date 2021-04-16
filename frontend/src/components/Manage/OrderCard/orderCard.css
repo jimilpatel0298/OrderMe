@@ -16,4 +16,14 @@
 #orderCardBtn #cancel {
     margin-bottom: 15px;
     padding: 8px;
+    color: #919aa1 !important;
+    background-color: white !important;
+}
+
+#orderCardBtn #preparing {
+    border-color: #919aa1;
+    margin-bottom: 15px;
+    padding: 8px;
+    color: #919aa1 !important;
+    background-color: white !important;
 }
