@@ -47,7 +47,6 @@ function App(props) {
 
   const postOrder = () => {
     const data = { ...cart }
-    console.log(data)
     const clearCart = {
       cartPrice: 0,
       cartItems: [],
@@ -57,23 +56,18 @@ function App(props) {
       }
     }
 
-    axios.post(`http://abad4ff5210e.ngrok.io/api/place_order`, data).then(response => {
-      console.log(response.data.data.order_id)
+    axios.post(`place_order`, data).then(response => {
       orderId = response.data.data.order_id
-      console.log('inside then')
       setCart(clearCart);
       setValidated(false);
       props.history.replace('/order');
     }).catch(error => {
-      console.log(error)
-      console.log('inside catch')
       toast.error('Could not connect to server. Please try again later.')
     })
   }
 
   const placeOrder = (event) => {
     const form = event.currentTarget;
-    console.log(form.checkValidity())
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
