@@ -23,8 +23,8 @@ from Order.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', TemplateView.as_view(template_name='index.html')),
-    path('manage', TemplateView.as_view(template_name='index.html')),
+    # path('', TemplateView.as_view(template_name='index.html')),
+    # path('manage', TemplateView.as_view(template_name='index.html')),
     path('api/', include('Order.urls')),
 ]
 
