@@ -14,6 +14,10 @@ from rest_framework.status import HTTP_401_UNAUTHORIZED, HTTP_200_OK, HTTP_404_N
 from rest_framework import status
 from rest_framework import viewsets
 
+from django.forms.models import model_to_dict
+
+import jsonpickle
+
 # Create your views here.
 
 
@@ -158,7 +162,6 @@ def get_order_details(requests):
 
         obj = Person.objects.all()
         serializer = PersonSerializer(obj, many=True)
-        # print(serializer.data)
         return Response(data={"status": "Success", "message": "Addons found", "data":  serializer.data},
                         status=HTTP_200_OK)
     except Exception as e:
@@ -170,56 +173,58 @@ def event_stream():
     initial_data = ''
     try:
         while True:
-            # serializer = PersonSerializer(Person.objects.last())
-            # data = serializer.data
+            def f():
+                def toDict(obj):
+                    return model_to_dict(obj)
 
-            def view():
-                person = Person.objects.last()
-                order = Order.objects.filter(person=person)
-                return JsonResponse(order, safe=False)
-            data = view()
-            print(data)
-            # data: {
-            #     "id": 10,
-            #     "name": "Jimil Patel",
-            #     "phone": "7567438095",
-            #     "order": [
-            #         {
-            #             "id": 10,
-            #             "status": "tobepaid",
-            #             "paid": 110.0,
-            #             "total": 110.0,
-            #             "orderitems": [
-            #                 {
-            #                     "id": 10,
-            #                     "name": "Aloo Masala",
-            #                     "category": "sandwiches",
-            #                     "product": 1,
-            #                     "order": 10,
-            #                     "size_id": 1,
-            #                     "size_name": "regular",
-            #                     "price": "100",
-            #                     "total": 110.0,
-            #                     "item_addons": [
-            #                         {
-            #                             "id": 11,
-            #                             "addon": 1,
-            #                             "name": "extra cheese",
-            #                             "price": "10"
-            #                         }
-            #                     ]
-            #                 }
-            #             ]
-            #         }
-            #     ]
-            # }
+                dataObj = {
+                    'contactDetails': {},
+                    'order': {},
+                    'orderItems': []
+                }
+                newOrder = Order.objects.last().id
+                orderObj = Order.objects.get(id=newOrder)
+                personObj = Person.objects.get(id=orderObj.person.id)
+                orderItems = OrderItem.objects.filter(order=orderObj)
 
-            # data = serializers.serialize('json', Person.objects.all())
-            # print(datajson)
-            # print(serializer.data)
-            # print(data)
-            # data_json = json.dumps(data, indent=4, cls=DjangoJSONEncoder)
-            # print(data_json)
+                dataObj['contactDetails'] = toDict(personObj)
+                dataObj['order'] = {
+                    'id': orderObj.id,
+                    'status': orderObj.status,
+                    'paid': orderObj.paid,
+                    'total': orderObj.total
+                }
+                for order_item in orderItems:
+                    temp_obj = {
+                        'id': order_item.id,
+                        'name': order_item.product.name,
+                        'category': order_item.category.type,
+                        'product': order_item.product.id,
+                        'order': orderObj.id,
+                        'total': order_item.total,
+                        'itemSize': {
+                            'id': order_item.size.id,
+                            'name': order_item.size.name,
+                            'price': order_item.size.price
+                        },
+                        'itemAddons': []
+                    }
+                    itemAddons = AddonOrderItem.objects.filter(orderitem=order_item)
+                    for item_addon in itemAddons:
+                        temp_addon = {
+                            'id': item_addon.id,
+                            'addon': item_addon.addon.id,
+                            'name': item_addon.addon.name,
+                            'price': item_addon.addon.price
+                        }
+                        temp_obj['itemAddons'].append(temp_addon)
+                    dataObj['orderItems'].append(temp_obj)
+
+                json_string = json.dumps(dataObj)
+                print(dataObj)
+                return json_string
+
+            data = f()
 
             if not initial_data == data:
                 yield "\ndata: {}\n\n".format(data)
@@ -232,19 +237,11 @@ def event_stream():
 
 def get_latest_order(requests):
     try:
-        # response = StreamingHttpResponse(event_stream())
-        # response['Content-Type'] = 'text/event-stream'
-        # response['Access-Control-Allow-Origin'] = "*"
-        # print(JSON.parse(response))
-        # return response
-        # print(StreamingHttpResponse(event_stream(), content_type='text/event-stream'))
-        # StreamingHttpResponse.streaming_content = 'text/event-stream'
-        # response = Response()
         response = StreamingHttpResponse(event_stream(), status=200)
         response['Content-Type'] = 'text/event-stream'
-        # response['Content-Type'] = 'application/json'
         response['Cache-Control'] = 'no-cache'
         return response
     except Exception as e:
         response = HttpResponseBadRequest('Invalid request: %s.\n' % str(e))
         return response
+

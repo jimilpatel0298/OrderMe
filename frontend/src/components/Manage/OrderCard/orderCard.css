@@ -1,0 +1,19 @@
+.orderCard {
+    border-radius: 7px;
+    margin-bottom: 1.5rem;
+}
+
+#orderCardBtn {
+    padding: 0 25px;
+}
+
+#orderCardBtn button {
+    width: 100%;
+    padding: 10px;
+    border-radius: 7px;
+}
+
+#orderCardBtn #cancel {
+    margin-bottom: 15px;
+    padding: 8px;
+}

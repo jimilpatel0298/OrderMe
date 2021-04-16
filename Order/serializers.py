@@ -179,4 +179,3 @@ class PersonSerializer(serializers.ModelSerializer):
         model = Person
         fields = ('id', 'name', 'phone', 'order')
         # fields = '__all__'
-
