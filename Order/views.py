@@ -4,31 +4,19 @@ import time
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse, StreamingHttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render
+from django.core import serializers
+from django.forms.models import model_to_dict
+
 from .models import *
 from .serializers import *
-from django.core import serializers
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.status import HTTP_401_UNAUTHORIZED, HTTP_200_OK, HTTP_404_NOT_FOUND, HTTP_400_BAD_REQUEST, HTTP_201_CREATED
-from rest_framework import status
-from rest_framework import viewsets
 
-from django.forms.models import model_to_dict
-
-import jsonpickle
+# import jsonpickle
 
 # Create your views here.
-
-
-class Productsclass(viewsets.ModelViewSet):
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-
-
-class Categoryclass(viewsets.ModelViewSet):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
 
 
 # @api_view(["POST"])
@@ -244,4 +232,28 @@ def get_latest_order(requests):
     except Exception as e:
         response = HttpResponseBadRequest('Invalid request: %s.\n' % str(e))
         return response
+
+
+# update status of a order
+@api_view(["PUT"])
+def update_order_status(request, order_id):
+    if request.method == "PUT":
+        try:
+            order = Order.objects.get(id=order_id)
+
+        except Exception as e:
+            return Response(
+                data={"status": "Error", "message": "Order Not Found", "data": {"error": str(e)}},
+                status=HTTP_404_NOT_FOUND)
+
+        serializer = OrderUpdateSerializer(order, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            if request.data['status'] == 'paid':
+                order.paid_status = True
+                order.save()
+            elif request.data['status'] == 'tobepaid':
+                order.paid_status = False
+                order.save()
+            return Response(data={'message': 'Status Updated!', 'Order': serializer.data}, status=HTTP_200_OK)
 
