@@ -65,7 +65,7 @@ admin.site.register(Person, PersonAdmin)
 
 class OrderAdmin(admin.ModelAdmin):
     model = Order
-    list_display = ('id', 'person', 'status', 'paid', 'total')
+    list_display = ('id', 'person', 'status', 'complete_status', 'paid_status', 'dispatched_status', 'paid', 'total')
 
 
 admin.site.register(Order, OrderAdmin)
