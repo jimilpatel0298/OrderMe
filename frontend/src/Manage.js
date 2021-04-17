@@ -330,14 +330,16 @@ class Manage extends Component {
             toast.error('Could not connect to server. Please try again later.')
         })
 
-        let source = new EventSource("http://localhost:8000/api/get_latest_order");
+        let source = new EventSource(`http://${window.location.host}/api/get_latest_order`);
         source.onmessage = e => {
+            console.log(e)
             if (this.landed === true) {
                 this.orderData(JSON.parse(e.data), true)
             }
             this.landed = true
         }
         source.onerror = e => {
+            console.log(e)
             console.log('inside error')
         }
 
