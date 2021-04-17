@@ -115,11 +115,32 @@ def place_order(request):
 
             return Response(data={'message': 'Order Placed', 'Order_id': order.id}, status=HTTP_201_CREATED)
 
+            # input time in seconds
+            t = 300  # 5 minutes
+            order_id = order.id
+            countdown(int(t), order_id)
+
         except Exception as e:
             print(str(e))
             return Response(
                 data={"status": "Error", "message": "Error occurred while in saving Category", "data": {"error": str(e)}},
                 status=HTTP_400_BAD_REQUEST)
+
+
+# define the countdown func.
+def countdown(t, order_id):
+    while t:
+        mins, secs = divmod(t, 60)
+        timer = '{:02d}:{:02d}'.format(mins, secs)
+        print(timer, end="\r")
+        order = Order.objects.get(id=order_id)
+        if order.paid_status == 'paid':
+            break
+        else:
+            order.status = 'cancelled'
+            order.save()
+        time.sleep(1)
+        t -= 1
 
 
 @api_view(["GET"])
