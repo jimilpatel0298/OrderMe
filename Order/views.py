@@ -1,9 +1,14 @@
+import datetime
 import json
 import time
+# import jsonpickle
 
+from frontend import public
+
+from django.utils import timezone
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse, StreamingHttpResponse, HttpResponseBadRequest, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.core import serializers
 from django.forms.models import model_to_dict
 
@@ -14,7 +19,6 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.status import HTTP_401_UNAUTHORIZED, HTTP_200_OK, HTTP_404_NOT_FOUND, HTTP_400_BAD_REQUEST, HTTP_201_CREATED
 
-# import jsonpickle
 
 # Create your views here.
 
@@ -43,6 +47,20 @@ from rest_framework.status import HTTP_401_UNAUTHORIZED, HTTP_200_OK, HTTP_404_N
 #             return Response(
 #                 data={"status": "Error", "message": "Error occurred while in saving Category", "data": {"error": str(e)}},
 #                 status=HTTP_400_BAD_REQUEST)
+
+
+def check_time(request):
+    current_time = datetime.datetime.now()
+    formatedTime = current_time.strftime("%d-%m-%y %H:%M:%S")
+    print(formatedTime)
+    open_time = "00:00:00"
+    close_time = "18:00:00"
+    if formatedTime > open_time and formatedTime < close_time:
+        # print('in if')
+        return render(request, 'index.html')
+    else:
+        # print('in else')
+        return HttpResponse('Breadbites is closed currently')
 
 
 # Get the details of all product along with category
