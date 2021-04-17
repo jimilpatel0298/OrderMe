@@ -107,8 +107,8 @@ def get_addons(requests, size_id):
 
 
 # place a new order
-@csrf_exempt
 @api_view(["POST"])
+@csrf_exempt
 def place_order(request):
     if request.method == "POST":
         try:
