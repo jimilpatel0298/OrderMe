@@ -9,6 +9,8 @@ from django.http import HttpResponse, StreamingHttpResponse, HttpResponseBadRequ
 from django.shortcuts import render, redirect
 from django.core import serializers
 from django.forms.models import model_to_dict
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import *
 from .serializers import *
@@ -105,6 +107,7 @@ def get_addons(requests, size_id):
 
 
 # place a new order
+@method_decorator(csrf_exempt)
 @api_view(["POST"])
 def place_order(request):
     if request.method == "POST":
