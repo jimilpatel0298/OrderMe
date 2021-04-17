@@ -3,8 +3,6 @@ import json
 import time
 # import jsonpickle
 
-from frontend import public
-
 from django.utils import timezone
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse, StreamingHttpResponse, HttpResponseBadRequest, JsonResponse
@@ -54,7 +52,7 @@ def check_time(request):
     formatedTime = current_time.strftime("%d-%m-%y %H:%M:%S")
     print(formatedTime)
     open_time = "00:00:00"
-    close_time = "18:00:00"
+    close_time = "24:00:00"
     if formatedTime > open_time and formatedTime < close_time:
         # print('in if')
         return render(request, 'index.html')
