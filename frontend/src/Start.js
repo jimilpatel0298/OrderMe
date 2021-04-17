@@ -23,8 +23,8 @@ const Start = () => {
             return <Auth pinSubmit={pinSubmit} />
         }
     }
-
-    axios.defaults.baseURL = 'http://localhost:8000/api/';
+    let url = window.location.host
+    axios.defaults.baseURL = 'http://' + window.location.host + '/api/'
 
     return (
         <Auxiliary>

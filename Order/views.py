@@ -3,8 +3,6 @@ import json
 import time
 # import jsonpickle
 
-from frontend import public
-
 from django.utils import timezone
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse, StreamingHttpResponse, HttpResponseBadRequest, JsonResponse
@@ -54,7 +52,7 @@ def check_time(request):
     formatedTime = current_time.strftime("%d-%m-%y %H:%M:%S")
     print(formatedTime)
     open_time = "00:00:00"
-    close_time = "18:00:00"
+    close_time = "24:00:00"
     if formatedTime > open_time and formatedTime < close_time:
         # print('in if')
         return render(request, 'index.html')
@@ -131,12 +129,12 @@ def place_order(request):
                     for addon in item['addons']:
                         addon_obj = AddonOrderItem.objects.create(orderitem_id=orderitem.id, addon_id=addon['id'])
 
-            return Response(data={'message': 'Order Placed', 'order_id': order.id}, status=HTTP_201_CREATED)
+            return Response(data={'message': 'Order Placed', 'order_id': order.id, 'price': order.total}, status=HTTP_201_CREATED)
 
-            # input time in seconds
-            t = 300  # 5 minutes
-            order_id = order.id
-            countdown(int(t), order_id)
+            # # input time in seconds
+            # t = 20  # 5 minutes
+            # order_id = order.id
+            # countdown(int(t), order_id)
 
         except Exception as e:
             print(str(e))
@@ -145,20 +143,20 @@ def place_order(request):
                 status=HTTP_400_BAD_REQUEST)
 
 
-# define the countdown func.
-def countdown(t, order_id):
-    while t:
-        mins, secs = divmod(t, 60)
-        timer = '{:02d}:{:02d}'.format(mins, secs)
-        print(timer, end="\r")
-        order = Order.objects.get(id=order_id)
-        if order.paid_status == True:
-            break
-        else:
-            order.status = 'cancelled'
-            order.save()
-        time.sleep(1)
-        t -= 1
+# # define the countdown func.
+# def countdown(t, order_id):
+#     while t:
+#         mins, secs = divmod(t, 60)
+#         timer = '{:02d}:{:02d}'.format(mins, secs)
+#         print(timer, end="\r")
+#         order = Order.objects.get(id=order_id)
+#         if order.paid_status == True:
+#             break
+#         else:
+#             order.status = 'cancelled'
+#             order.save()
+#         time.sleep(1)
+#         t -= 1
 
 
 @api_view(["GET"])
@@ -202,64 +200,63 @@ def event_stream():
         while True:
             def toDict(obj):
                 return model_to_dict(obj)
-
-            dataObj = {
-                'contactDetails': {},
-                'order': {},
-                'orderItems': []
-            }
-            newOrder = Order.objects.last().id
-            orderObj = Order.objects.get(id=newOrder)
-            personObj = Person.objects.get(id=orderObj.person.id)
-            orderItems = OrderItem.objects.filter(order=orderObj)
-
-            dataObj['contactDetails'] = toDict(personObj)
-            dataObj['order'] = {
-                'id': orderObj.id,
-                'status': orderObj.status,
-                'paid': orderObj.paid,
-                'total': orderObj.total
-            }
-            for order_item in orderItems:
-                temp_obj = {
-                    'id': order_item.id,
-                    'name': order_item.product.name,
-                    'category': order_item.category.type,
-                    'product': order_item.product.id,
-                    'order': orderObj.id,
-                    'total': order_item.total,
-                    'itemSize': {
-                        'id': order_item.size.id,
-                        'name': order_item.size.name,
-                        'price': order_item.size.price
-                    },
-                    'itemAddons': []
+            if Order.objects.all().exists():
+                dataObj = {
+                    'contactDetails': {},
+                    'order': {},
+                    'orderItems': []
                 }
-                itemAddons = AddonOrderItem.objects.filter(orderitem=order_item)
-                for item_addon in itemAddons:
-                    temp_addon = {
-                        'id': item_addon.id,
-                        'addon': item_addon.addon.id,
-                        'name': item_addon.addon.name,
-                        'price': item_addon.addon.price
+                newOrder = Order.objects.last().id
+                orderObj = Order.objects.get(id=newOrder)
+                personObj = Person.objects.get(id=orderObj.person.id)
+                orderItems = OrderItem.objects.filter(order=orderObj)
+
+                dataObj['contactDetails'] = toDict(personObj)
+                dataObj['order'] = {
+                    'id': orderObj.id,
+                    'status': orderObj.status,
+                    'paid': orderObj.paid,
+                    'total': orderObj.total
+                }
+                for order_item in orderItems:
+                    temp_obj = {
+                        'id': order_item.id,
+                        'name': order_item.product.name,
+                        'category': order_item.category.type,
+                        'product': order_item.product.id,
+                        'order': orderObj.id,
+                        'total': order_item.total,
+                        'itemSize': {
+                            'id': order_item.size.id,
+                            'name': order_item.size.name,
+                            'price': order_item.size.price
+                        },
+                        'itemAddons': []
                     }
-                    temp_obj['itemAddons'].append(temp_addon)
-                dataObj['orderItems'].append(temp_obj)
+                    itemAddons = AddonOrderItem.objects.filter(orderitem=order_item)
+                    for item_addon in itemAddons:
+                        temp_addon = {
+                            'id': item_addon.id,
+                            'addon': item_addon.addon.id,
+                            'name': item_addon.addon.name,
+                            'price': item_addon.addon.price
+                        }
+                        temp_obj['itemAddons'].append(temp_addon)
+                    dataObj['orderItems'].append(temp_obj)
 
-            if dataObj['order']['status'] == 'paid' or dataObj['order']['status'] == 'cancelled' or dataObj['order']['status'] == 'dispatched':
-                continue
+                if dataObj['order']['status'] == 'paid' or dataObj['order']['status'] == 'cancelled' or dataObj['order']['status'] == 'dispatched':
+                    continue
 
-            json_string = json.dumps(dataObj)
-            data = json_string
-            print(data)
+                json_string = json.dumps(dataObj)
+                data = json_string
 
-            if not initial_data == data:
-                yield "\ndata: {}\n\n".format(data)
-                initial_data = data
-            time.sleep(1)
+                if not initial_data == data:
+                    yield "\ndata: {}\n\n".format(data)
+                    initial_data = data
+                time.sleep(1)
 
     except Exception as e:
-        print(str(e))
+        print('exception', e)
 
 
 def get_latest_order(requests):
@@ -300,4 +297,3 @@ def update_order_status(request, order_id):
                 order.dispatched_status = True
                 order.save()
             return Response(data={'message': 'Status Updated!', 'order': serializer.data}, status=HTTP_200_OK)
-

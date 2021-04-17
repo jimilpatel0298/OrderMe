@@ -20,6 +20,11 @@ function App(props) {
     }
   })
 
+  const [prevOrderDetails, setPrevOrderDetails] = useState({
+    id: null,
+    price: null
+  })
+
   const addToCart = (orderedObject) => {
     const orderedObjectCopied = { ...orderedObject }
     let cartTemp = { ...cart }
@@ -43,7 +48,7 @@ function App(props) {
 
   const [validated, setValidated] = useState(false);
 
-  let orderId = null;
+  let orderId = 1;
 
   const postOrder = () => {
     const data = { ...cart }
@@ -55,13 +60,17 @@ function App(props) {
         phone: ''
       }
     }
+    let prevOrderDetailsTemp = {...prevOrderDetails}
 
     axios.post(`place_order`, data).then(response => {
-      orderId = response.data.data.order_id
+      prevOrderDetailsTemp.id = response.data.order_id
+      prevOrderDetailsTemp.price = response.data.price
+      setPrevOrderDetails(prevOrderDetailsTemp);
       setCart(clearCart);
       setValidated(false);
       props.history.replace('/order');
     }).catch(error => {
+      console.log(error)
       toast.error('Could not connect to server. Please try again later.')
     })
   }
@@ -139,7 +148,7 @@ function App(props) {
               </Link>
             </Route>
             <Route path={props.match.url + 'order'}>
-              <AlertMsg variant='success' title='Order Successful!'><p>Thank you for your order. We've received it at our end. Please <span>Pay Rs. {cart.cartPrice} </span>at the cash counter. Your <span>Order ID </span>is <span>{orderId}</span></p></AlertMsg>
+              <AlertMsg variant='success' title='Order Successful!'><p>Thank you for your order. We've received it at our end. Please <span>Pay Rs. {prevOrderDetails.price} </span>at the cash counter. Your <span>Order ID </span>is <span>{prevOrderDetails.id}</span></p></AlertMsg>
             </Route>
             <Route render={() => <h1>404. Page Not Found!</h1>} />
           </Switch>
