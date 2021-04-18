@@ -10,7 +10,7 @@ from django.shortcuts import render, redirect
 from django.core import serializers
 from django.forms.models import model_to_dict
 from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt, csrf_protect, ensure_csrf_cookieensure_csrf_cookie
+from django.views.decorators.csrf import csrf_exempt, csrf_protect, ensure_csrf_cookie
 
 from .models import *
 from .serializers import *
