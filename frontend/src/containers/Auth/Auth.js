@@ -18,7 +18,9 @@ const Auth = (props) => {
                     <Form.Group controlId="formGroupPassword">
                         <Form.Control type="password" placeholder="Password" value={pinInput} onChange={inputHandler}/>
                     </Form.Group>
-                    <Button variant="primary" type="submit" as='div' style={{width: '100%'}}>
+                    <Button variant="primary" type="submit" as='div' style={{width: '100%'}} onClick={(event)=>{
+                        props.pinSubmit(event, pinInput);
+                    }}>
                         Submit
                     </Button>
                 </Form>
