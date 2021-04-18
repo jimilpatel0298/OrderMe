@@ -10,7 +10,7 @@ from django.shortcuts import render, redirect
 from django.core import serializers
 from django.forms.models import model_to_dict
 from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
 
 from .models import *
 from .serializers import *
@@ -108,6 +108,7 @@ def get_addons(requests, size_id):
 
 # place a new order
 @api_view(["POST"])
+@csrf_protect
 def place_order(request):
     if request.method == "POST":
         try:
