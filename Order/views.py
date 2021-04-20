@@ -51,16 +51,18 @@ from rest_framework.status import HTTP_401_UNAUTHORIZED, HTTP_200_OK, HTTP_404_N
 
 def check_time(request):
     current_time = datetime.datetime.now()
-    formatedTime = current_time.strftime("%d-%m-%y %H:%M:%S")
-    print(formatedTime)
-    open_time = "00:00:00"
-    close_time = "24:00:00"
-    if formatedTime > open_time and formatedTime < close_time:
-        # print('in if')
+    formatedTime = current_time.strftime("%H:%M:%S")
+    time = Time.objects.last()
+    open_time = str(time.open_time)
+    close_time = str(time.close_time)
+
+    if open_time < formatedTime < close_time:
         return render(request, 'index.html')
     else:
-        # print('in else')
-        return HttpResponse('Breadbites is closed currently')
+        message = '<center><h1>Breadbites is currently closed !!!</h1><br> \n <h2>Open Time: <b>{}</b>&nbsp;&nbsp; ' \
+                  'Close Time: <b>{}</b></h2></center>'.format(open_time, close_time)
+
+        return HttpResponse(message)
 
 
 # Get the details of all product along with category
