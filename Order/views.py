@@ -312,3 +312,7 @@ def update_order_status(request, order_id):
                 order.dispatched_status = True
                 order.save()
             return Response(data={'message': 'Status Updated!', 'order': serializer.data}, status=HTTP_200_OK)
+
+
+def handler_404(request, exception):
+    return render(request, 'index.html')

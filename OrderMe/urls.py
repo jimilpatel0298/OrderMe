@@ -20,6 +20,8 @@ from django.conf.urls.static import static
 from django.views.generic import TemplateView
 from Order.views import *
 
+handler404 = 'Order.views.handler_404'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', check_time),
@@ -28,7 +30,7 @@ urlpatterns = [
     path('order', TemplateView.as_view(template_name='index.html')),
     path('cart', TemplateView.as_view(template_name='index.html')),
     path('api/', include('Order.urls')),
-    re_path(r'.*', TemplateView.as_view(template_name='index.html')),
+    # re_path(r'.*', TemplateView.as_view(template_name='index.html')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
