@@ -6,7 +6,8 @@ import defaultImage from '../../images/img-default.png'
 import './MenuItem.css'
 
 const MenuItem = (props) => {
-    const image_url = 'http://127.0.0.1:8000' + props.item.image
+    const url = window.location.host
+    const image_url = url + props.item.image
     
     return (
         <div className='item'>
