@@ -321,13 +321,11 @@ class Manage extends Component {
     landed = false
     fetchOrder = () => {
         axios.get('get_order_details').then(response => {
-            console.log(response)
             if (response.data.data.length !== 0) {
-                console.log('inside get order', response.data.data)
                 this.orderData(response.data.data);
             }
         }).catch(error => {
-            console.log(error)
+            console.log('fetch order error', error)
             toast.error('Could not connect to server. Please try again later.')
         })
 
@@ -335,14 +333,12 @@ class Manage extends Component {
         source.onmessage = e => {
             console.log(e)
             if (this.landed === true) {
-                console.log('inside if landed')
                 this.orderData(JSON.parse(e.data), true)
             }
             this.landed = true
         }
         source.onerror = e => {
-            console.log('event srouce error', e)
-            console.log('inside error')
+            console.log('event source error', e)
             toast.error('Could not connect to server. Please try again later.')
         }
 
