@@ -6,6 +6,7 @@ db.sqlite3
 OrderMe/local_settings.py
 
 static/
+media/
 # React Files Below
 # dependencies
 /node_modules
