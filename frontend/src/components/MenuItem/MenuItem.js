@@ -7,7 +7,7 @@ import './MenuItem.css'
 
 const MenuItem = (props) => {
     const url = window.location.host
-    const image_url = url + props.item.image
+    const image_url = 'http://' + url + props.item.image
     
     return (
         <div className='item'>
