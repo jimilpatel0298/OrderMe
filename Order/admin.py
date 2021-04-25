@@ -4,6 +4,7 @@ from .models import *
 # Register your models here.
 
 admin.site.register(QrCode)
+admin.site.register(Time)
 # admin.site.register(Person)
 # admin.site.register(Order)
 # admin.site.register(OrderItem)

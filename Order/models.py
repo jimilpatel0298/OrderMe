@@ -178,3 +178,8 @@ class AddonOrderItem(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, editable=True, null=True, blank=True)
 
+
+class Time(models.Model):
+    open_time = models.TimeField(auto_now_add=False, editable=True, null=True, blank=True)
+    close_time = models.TimeField(auto_now=False, editable=True, null=True, blank=True)
+
