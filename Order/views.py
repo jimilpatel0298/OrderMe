@@ -198,11 +198,16 @@ def get_order_details(requests):
 
 def event_stream():
     initial_data = ''
+
     try:
         while True:
+
             def toDict(obj):
                 return model_to_dict(obj)
+
+            print(Order.objects.all().exists())
             if Order.objects.all().exists():
+                print('inside if')
                 dataObj = {
                     'contactDetails': {},
                     'order': {},
@@ -247,11 +252,19 @@ def event_stream():
                     dataObj['orderItems'].append(temp_obj)
 
                 if dataObj['order']['status'] == 'paid' or dataObj['order']['status'] == 'cancelled' or dataObj['order']['status'] == 'dispatched':
+                    time.sleep(1)
                     continue
 
                 json_string = json.dumps(dataObj)
                 data = json_string
-
+                print(data)
+                if not initial_data == data:
+                    yield "\ndata: {}\n\n".format(data)
+                    initial_data = data
+                time.sleep(1)
+            else:
+                json_string = json.dumps({'data': 0})
+                data = json_string
                 if not initial_data == data:
                     yield "\ndata: {}\n\n".format(data)
                     initial_data = data
@@ -266,6 +279,7 @@ def get_latest_order(requests):
         response = StreamingHttpResponse(event_stream(), status=200)
         response['Content-Type'] = 'text/event-stream'
         response['Cache-Control'] = 'no-cache'
+        print(response)
         return response
     except Exception as e:
         response = HttpResponseBadRequest('Invalid request: %s.\n' % str(e))
