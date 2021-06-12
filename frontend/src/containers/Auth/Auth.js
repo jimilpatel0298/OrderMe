@@ -16,9 +16,9 @@ const Auth = (props) => {
             <Alert variant='info' title='Enter PIN'>
                 <Form onSubmit={(event) => props.pinSubmit(event, pinInput) }>
                     <Form.Group controlId="formGroupPassword">
-                        <Form.Control type="password" placeholder="Password" value={pinInput} onChange={inputHandler}/>
+                        <Form.Control type="password" placeholder="Password" value={pinInput} onChange={inputHandler} style={{borderRadius: '70px'}}/>
                     </Form.Group>
-                    <Button variant="primary" type="submit" as='div' style={{width: '100%'}} onClick={(event)=>{
+                    <Button variant="primary" type="submit" style={{width: '100%', borderRadius: '70px'}} onClick={(event)=>{
                         props.pinSubmit(event, pinInput);
                     }}>
                         Submit

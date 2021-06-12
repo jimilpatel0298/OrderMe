@@ -5,3 +5,8 @@
 .bold {
     font-weight: 500;
 }
+
+.confirmation-modal-footer {
+    justify-content:flex-end;
+    /* padding: 7px !important; */
+}

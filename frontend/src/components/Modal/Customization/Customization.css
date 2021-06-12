@@ -7,17 +7,52 @@
 }
 
 .modal-footer {
-    justify-content: space-evenly;
+    justify-content: space-between;
+    padding: 0;
 }
 
 input[type='checkbox'], input[type='radio']{
     vertical-align: middle;
+    margin-top: -2px;
 }
 
 label {
     margin-bottom: 0;
+    cursor: pointer;
 }
 
 .div-form {
     margin-bottom: 5px;
+}
+
+.btn-add-to-cart {
+    padding: 12px 25px;
+    width: 50%;
+    margin: 0;
+    border-bottom-right-radius: 13px;
+    font-size: 13px;
+}
+
+.modal-footer h5 {
+    margin-left: 40px;
+    font-size: 17px;
+    padding: 0;
+    margin-top: 0;
+}
+
+.close {
+    font-size: 1.6rem;
+}
+
+.border-brown {
+    border-bottom: 1px solid #af5b1c;
+    padding-bottom: 5px;
+}
+
+.modal-header .close {
+    padding-top: 10px;
+}
+
+hr {
+    background-color: #af5b1c;
 }

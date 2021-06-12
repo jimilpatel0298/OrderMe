@@ -133,6 +133,8 @@ class Order(models.Model):
     Cancelled = 'cancelled'
     Dispatched = 'dispatched'
     Tobepaid = 'tobepaid'
+    Paylater = 'paylater'
+    Prepared = 'prepared'
 
     person = models.ForeignKey(Person, related_name='order', on_delete=models.DO_NOTHING, null=True, blank=True)
     date_order = models.DateTimeField(auto_now_add=True)
@@ -143,7 +145,9 @@ class Order(models.Model):
         (Paid, 'Paid'),               # ( value, human readable-name)
         (Cancelled, 'Cancelled'),
         (Dispatched, 'Dispatched'),
-        (Tobepaid, 'Tobepaid')
+        (Tobepaid, 'Tobepaid'),
+        (Paylater, 'Paylater'),
+        (Prepared, 'Prepared')
     )
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default=Tobepaid)
     paid = models.FloatField(null=True, blank=True)

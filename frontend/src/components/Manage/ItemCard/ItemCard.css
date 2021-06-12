@@ -1,8 +1,8 @@
 .item-card {
     text-transform: capitalize;
     min-width: 12rem;
-    max-width: 12rem;
-    border-radius: 7px;
+    max-width: 13rem;
+    border-radius: 13px;
 }
 
 .item-card-body {
@@ -11,7 +11,7 @@
 
 @media (min-width: 576px) {
     .card-deck .card {
-        margin: 10px 15px 10px 15px;
+        margin: 0px 0px 16px 16px;
     }
 }
 
@@ -19,4 +19,8 @@
     .item-card {
         max-width: 100%;
     }
+}
+
+.item-card-body-text p {
+    font-size: 12px !important;
 }

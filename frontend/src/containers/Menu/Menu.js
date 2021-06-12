@@ -76,7 +76,7 @@ class Menu extends Component {
             stateTemp.menuItems = response.data.data.menuItems
             this.setState(stateTemp)
         }).catch(error => {
-            toast.error('Could not connect to server. Please try again later.')
+            toast.error('Could not connect to server. Please try again!')
         })
     }
 

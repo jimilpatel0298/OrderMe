@@ -8,6 +8,9 @@ import './manage.css'
 import Confirmation from './components/Modal/Confirmation/Confirmation'
 import axios from 'axios'
 import { ToastContainer, toast, Bounce } from 'react-toastify';
+import {Howl, Howler} from 'howler';
+import notifySound from './sounds/notification.mp3';
+import { func } from 'prop-types'
 
 
 class Manage extends Component {
@@ -24,6 +27,7 @@ class Manage extends Component {
             //         status: 'tobepaid',
             //         paid: 160.0,
             //         total: 160.0,
+            //         paidStatus: false
             //     },
             //     orderItems: [
             //         {
@@ -77,10 +81,69 @@ class Manage extends Component {
             //         phone: "7567438095"
             //     },
             //     order: {
-            //         id: 14,
+            //         id: 15,
             //         status: 'paid',
             //         paid: 160.0,
             //         total: 160.0,
+            //         paidStatus: true
+            //     },
+            //     orderItems: [
+            //         {
+            //             id: 8,
+            //             name: "Farm Fresh",
+            //             category: 'bread pizza',
+            //             product: 1,
+            //             order: 14,
+            //             total: 160.0,
+            //             itemSize: {
+            //                 id: 2,
+            //                 name: 'jumbo',
+            //                 price: 150.0
+            //             },
+            //             itemAddons: [
+            //                 {
+            //                     id: 6,
+            //                     addon: 1,
+            //                     name: "extra toppings",
+            //                     price: 10.0
+            //                 }
+            //             ]
+            //         },
+            //         {
+            //             id: 9,
+            //             name: "Farm Fresh",
+            //             category: 'bread pizza',
+            //             product: 1,
+            //             order: 14,
+            //             total: 160.0,
+            //             itemSize: {
+            //                 id: 2,
+            //                 name: 'jumbo',
+            //                 price: 150.0
+            //             },
+            //             itemAddons: [
+            //                 {
+            //                     id: 6,
+            //                     addon: 1,
+            //                     name: "extra toppings",
+            //                     price: 10.0
+            //                 }
+            //             ]
+            //         },
+            //     ]
+            // },
+            // {
+            //     contactDetails: {
+            //         id: 12,
+            //         name: 'Anshul Kotadia',
+            //         phone: "7567438095"
+            //     },
+            //     order: {
+            //         id: 16,
+            //         status: 'paylater',
+            //         paid: 160.0,
+            //         total: 160.0,
+            //         paidStatus: false
             //     },
             //     orderItems: [
             //         {
@@ -134,14 +197,57 @@ class Manage extends Component {
             //         phone: "7567438095"
             //     },
             //     order: {
-            //         id: 14,
+            //         id: 17,
             //         status: 'prepared',
             //         paid: 160.0,
             //         total: 160.0,
+            //         paidStatus: true
             //     },
             //     orderItems: [
             //         {
             //             id: 8,
+            //             name: "Farm Fresh",
+            //             category: 'bread pizza',
+            //             product: 1,
+            //             order: 14,
+            //             total: 160.0,
+            //             itemSize: {
+            //                 id: 2,
+            //                 name: 'jumbo',
+            //                 price: 150.0
+            //             },
+            //             itemAddons: [
+            //                 {
+            //                     id: 6,
+            //                     addon: 1,
+            //                     name: "extra toppings",
+            //                     price: 10.0
+            //                 }
+            //             ]
+            //         },
+            //         {
+            //             id: 9,
+            //             name: "Farm Fresh",
+            //             category: 'bread pizza',
+            //             product: 1,
+            //             order: 14,
+            //             total: 160.0,
+            //             itemSize: {
+            //                 id: 2,
+            //                 name: 'jumbo',
+            //                 price: 150.0
+            //             },
+            //             itemAddons: [
+            //                 {
+            //                     id: 6,
+            //                     addon: 1,
+            //                     name: "extra toppings",
+            //                     price: 10.0
+            //                 }
+            //             ]
+            //         },
+            //         {
+            //             id: 9,
             //             name: "Farm Fresh",
             //             category: 'bread pizza',
             //             product: 1,
@@ -186,6 +292,22 @@ class Manage extends Component {
             // },
         ],
         confirmation: false,
+        soundLoop: false
+    }
+
+    sound = new Howl({
+        src: notifySound,
+        loop: true,
+    });
+
+    soundPlay = () => {
+
+        this.sound.play();
+        Howler.volume(1.0);
+    }
+
+    soundStop = () => {
+        this.sound.stop();
     }
 
     preparedHandler = (event, orderTemp1) => {
@@ -195,10 +317,14 @@ class Manage extends Component {
         this.setState({ orders: ordersTemp, confirmation: false })
     }
 
-    confirmHandler = (event, orderTemp) => {
+    confirmHandler = (event, orderTemp, paidbtn=false) => {
         let ordersTemp = [...this.state.orders]
         const elementIndex = this.state.orders.findIndex(element => element.order.id === orderTemp.data.order.id)
         ordersTemp[elementIndex].order.status = orderTemp.messages.title.toLowerCase()
+        
+        if(paidbtn == true) {
+            ordersTemp[elementIndex].order.paidStatus = true
+        }
         
         axios.put(`update_status/${orderTemp.data.order.id}`, {status: orderTemp.messages.title.toLowerCase()})
         .then(response => {
@@ -223,6 +349,11 @@ class Manage extends Component {
             button: this.confirmHandler
 
         },
+        payLater: {
+            title: 'Paylater',
+            body: 'Are you sure you want to confirm the order as pay later?',
+            button: this.confirmHandler
+        },
         cancel: {
             title: 'Cancelled',
             body: "Are you sure you want to cancel the order?",
@@ -238,7 +369,7 @@ class Manage extends Component {
         prepared: {
             title: 'Prepared',
             body: 'Are you sure you want to make the order prepared?',
-            button: this.preparedHandler
+            button: this.confirmHandler
         }
     }
 
@@ -259,7 +390,7 @@ class Manage extends Component {
     displayOrders = () => {
         // display category block and items inside 
         const menu_items = this.state.orders.map(iteration => {
-            return <OrderCard statusHandler={this.statusHandler} order={iteration} key={iteration.order.id} />
+            return <OrderCard statusHandler={this.statusHandler} order={iteration} key={iteration.order.id} soundStop={this.soundStop}/>
         });
 
         return menu_items
@@ -285,7 +416,8 @@ class Manage extends Component {
                         id: elementOrder.order[0].id,
                         status: elementOrder.order[0].status,
                         paid: elementOrder.order[0].paid,
-                        total: elementOrder.order[0].total
+                        total: elementOrder.order[0].total,
+                        paidStatus: elementOrder.order[0].paid_status
                     },
                     orderItems: elementOrder.order[0].orderitems.map(elementOrderItem => {
                         let orderItemTemp = {
@@ -318,7 +450,9 @@ class Manage extends Component {
         }
         this.setState({ orders: ordersTemp })
     }
-    landed = false
+
+    landed = false;
+
     fetchOrder = () => {
         axios.get('get_order_details').then(response => {
             if (response.data.data.length !== 0) {
@@ -334,8 +468,9 @@ class Manage extends Component {
             console.log(e)
             if (this.landed === true) {
                 this.orderData(JSON.parse(e.data), true)
+                this.soundPlay()
             }
-            this.landed = true
+            this.landed = true;
         }
         source.onerror = e => {
             console.log('event source error', e)
@@ -352,7 +487,7 @@ class Manage extends Component {
     render() {
         return (
             <Auxiliary>
-                <Header />
+                <Header title='manage' />
                 <ToastContainer
                     position="top-center"
                     transition={Bounce}
@@ -364,13 +499,14 @@ class Manage extends Component {
                     pauseOnFocusLoss
                     draggable
                     pauseOnHover={false}
+                    closeButton={false}
                 />
-                <main className='py-3'>
+                <main className='py-3 app-body'>
                     <Container>
                         <div id='headerBar'>
                             <Row>
-                                <Col>Orders: <span className="bold">{this.state.orders.length}</span></Col>
-                                <Col style={{ textAlign: 'right' }}>Filter</Col>
+                                <Col><h4 style={{fontWeight: '400'}}>Orders: <span className="bold">{this.state.orders.length}</span></h4></Col>
+                                <Col style={{ textAlign: 'right' }}><h4>Filter</h4></Col>
                             </Row>
                         </div>
                         <div id='orders'>
