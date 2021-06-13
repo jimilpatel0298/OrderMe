@@ -41,7 +41,6 @@ def check_time(request):
 def day(request):
     try:
         day = datetime.date.isoweekday(datetime.datetime.now()) % 7
-        print('day is', day)
 
         return Response(data={"day": day}, status=HTTP_200_OK)
     except Exception as e:
