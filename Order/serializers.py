@@ -42,7 +42,7 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         # ordering = ["category"]
-        fields = ("id", "name", "price", "image", "description",)
+        fields = ("id", "name", "price", "image", "description", "customizable")
         # depth = 3
 
 

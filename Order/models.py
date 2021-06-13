@@ -60,6 +60,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=5, decimal_places=0, null=True)
     calories = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
     image = models.FileField(upload_to='image/', blank=True, null=True)
+    customizable = models.BooleanField(default=False, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, editable=True, null=True, blank=True)
 
