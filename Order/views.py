@@ -20,32 +20,6 @@ from rest_framework.status import HTTP_401_UNAUTHORIZED, HTTP_200_OK, HTTP_404_N
 # Create your views here.
 
 
-# @api_view(["POST"])
-# def add_category(request):
-#     if request.method == "POST":
-#         try:
-#             # print(json.loads(request.data))
-#             print(request.data)
-#             print(request.POST['name'])
-#             # temp = json.dumps(request.data)
-#             # print(temp)
-#
-#             size_serializer = SizeSerializer(data=request.data)
-#             if size_serializer.is_valid():
-#                 size_serializer.save()
-#             serializer = AddCategorySerializer(data=request.data)
-#             if serializer.is_valid():
-#                 serializer.save()
-#                 return Response(data={'message': 'Category Inserted', 'Category': serializer.data}, status=HTTP_201_CREATED)
-#             else:
-#                 return Response(data={'message': 'Category Already Exists', 'Category': serializer.data}, status=HTTP_401_UNAUTHORIZED)
-#
-#         except Exception as e:
-#             return Response(
-#                 data={"status": "Error", "message": "Error occurred while in saving Category", "data": {"error": str(e)}},
-#                 status=HTTP_400_BAD_REQUEST)
-
-
 def check_time(request):
     current_time = datetime.datetime.now()
     formatedTime = current_time.strftime("%H:%M:%S")
@@ -60,6 +34,19 @@ def check_time(request):
                   'Close Time: <b>{}</b></h2></center>'.format(open_time, close_time)
 
         return HttpResponse(message)
+
+
+# Get the current day
+@api_view(["GET"])
+def day(request):
+    try:
+        day = datetime.date.isoweekday(datetime.datetime.now()) % 7
+        print('day is', day)
+
+        return Response(data={"day": day}, status=HTTP_200_OK)
+    except Exception as e:
+        return Response(data={"status": "Error", "message": "Get Day Failed", "data": {"errors": str(e)}},
+                        status=HTTP_200_OK)
 
 
 # Get the details of all product along with category
