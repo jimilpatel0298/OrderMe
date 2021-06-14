@@ -7,7 +7,7 @@ const Header = (props) => {
         <header>
             <Navbar expand="lg" bg="secondary" variant="dark" fixed="top" className='bg-header'>
                 <Container>
-                <img src={logo} className='img-logo' />
+                <img src={logo} className='img-logo' alt='logo'/>
                 <Nav className='ml-auto'>
                     <h5 style={{padding: '0px', margin: '0px', textTransform: 'uppercase'}}>{props.title}</h5>
                     </Nav> 

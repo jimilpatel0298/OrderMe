@@ -10,7 +10,6 @@ import axios from 'axios'
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 import {Howl, Howler} from 'howler';
 import notifySound from './sounds/notification.mp3';
-import { func } from 'prop-types'
 
 
 class Manage extends Component {
@@ -317,12 +316,12 @@ class Manage extends Component {
         this.setState({ orders: ordersTemp, confirmation: false })
     }
 
-    confirmHandler = (event, orderTemp, paidbtn=false) => {
+    confirmHandler = (event, orderTemp) => {
         let ordersTemp = [...this.state.orders]
         const elementIndex = this.state.orders.findIndex(element => element.order.id === orderTemp.data.order.id)
         ordersTemp[elementIndex].order.status = orderTemp.messages.title.toLowerCase()
         
-        if(paidbtn == true) {
+        if(orderTemp.paidBtn === true) {
             ordersTemp[elementIndex].order.paidStatus = true
         }
         
@@ -378,11 +377,12 @@ class Manage extends Component {
     confirmationClose = () => this.setState({ confirmation: false })
     confirmationShow = () => this.setState({ confirmation: true })
 
-    statusHandler = (event, order) => {
+    statusHandler = (event, order, paidbtn) => {
         console.log(order)
         const button = event.target.id
         this.modalInfo.messages = this.messages[button]
         this.modalInfo.data = order
+        this.modalInfo.paidBtn = paidbtn
         console.log(this.modalInfo)
         this.confirmationShow();
     }

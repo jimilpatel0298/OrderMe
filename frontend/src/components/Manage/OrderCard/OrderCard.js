@@ -31,7 +31,7 @@ const OrderCard = (props) => {
                     <Col lg={2}>Order No: <span className='bold'>{props.order.order.id}</span></Col>
                     <Col lg={2}>Items: <span className="bold">{props.order.orderItems.length}</span></Col>
                     <Col lg={5}>Contact: <span className="bold">{props.order.contactDetails.name} - {props.order.contactDetails.phone}</span></Col>
-                    <Col lg={3}>Amount: <span className="bold">{props.order.order.total}</span> - {props.order.order.paidStatus == true ? <span>Paid</span> : <span>Not Paid</span>}</Col>
+                    <Col lg={3}>Amount: <span className="bold">{props.order.order.total}</span> - {props.order.order.paidStatus === true ? <span>Paid</span> : <span>Not Paid</span>}</Col>
                 </Row>
             </Card.Header>
             <Card.Body className='order-card-body'>
@@ -58,7 +58,7 @@ const OrderCard = (props) => {
                                     <Button variant="warning" id='prepared' onClick={(event) => props.statusHandler(event, props.order)}>Prepared</Button>
                                 </>
                                 )
-                            } else if (props.order.order.status === 'prepared' && props.order.order.paidStatus == true) {
+                            } else if (props.order.order.status === 'prepared' && props.order.order.paidStatus === true) {
                                 return (<>
                                     <Button variant="success" id='dispatched' onClick={(event) => props.statusHandler(event, props.order)}>Dispatched</Button>
                                 </>
@@ -71,7 +71,7 @@ const OrderCard = (props) => {
                                     <Button variant="danger" id='prepared' onClick={(event) => props.statusHandler(event, props.order)}>Prepared</Button>
                                 </>
                                 )
-                            } else if (props.order.order.status === 'prepared' && props.order.order.paidStatus == false ) {
+                            } else if (props.order.order.status === 'prepared' && props.order.order.paidStatus === false ) {
                                 return (<>
                                     <Button variant="info" id='paid' onClick={(event) => props.statusHandler(event, props.order, true)}>Paid</Button>
                                     <Button variant="success" id='dispatched' onClick={(event) => props.statusHandler(event, props.order)}>Dispatched</Button>

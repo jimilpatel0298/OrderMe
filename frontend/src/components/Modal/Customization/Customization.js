@@ -189,9 +189,9 @@ const Customization = (props) => {
                 </Modal.Header>
                 <Modal.Body>
                     {((itemData !== null) && (itemAddOns !== null))
-                        ? <><h5 className='mb-2'>Choose your size</h5>{chooseSize()}
-                        <hr />
-                            <h5 className='mt-3 mb-2'>Add Ons</h5>{chooseAddons()}
+                        ? <>
+                        <h5 className='mb-2'>Size</h5>{chooseSize()}<hr />
+                        {itemAddOns.length !== 0 ? <><h5 className='mt-3 mb-2'>Add Ons</h5>{chooseAddons()}</> : null}
                         </>
                         : <p>loading...</p>
                     }

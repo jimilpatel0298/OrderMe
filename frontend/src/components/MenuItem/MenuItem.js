@@ -28,7 +28,9 @@ const MenuItem = (props) => {
                                 <h4 className='price'><span className='rupee'>₹</span> {props.item.price}</h4>
                             </Col>
                             <Col style={{textAlign: 'right'}}>
-                                <Button className='btn-item-add' onClick={() => props.onAdd(props.item, props.category)}>Add<sup>+</sup></Button>
+                                {props.item.customizable === true ? 
+                                <Button className='btn-item-add' onClick={() => props.onAdd(props.item, props.category)}>Add<sup>+</sup></Button> :
+                                <Button className='btn-item-add' onClick={() => props.onAdd(props.item, props.category)}>Add</Button>}                                
                             </Col>
                         </Row>
                         </div>

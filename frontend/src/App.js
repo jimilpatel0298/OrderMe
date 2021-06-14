@@ -3,7 +3,7 @@ import Menu from './containers/Menu/Menu'
 import Footer from './components/Footer/Footer'
 import { Container } from 'react-bootstrap'
 import { Link, Route, withRouter, Switch } from 'react-router-dom'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Cart from './containers/Cart/Cart'
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -27,10 +27,24 @@ function App(props) {
     price: null
   })
 
+  const [day, setDay] = useState(null)
+
+  useEffect(() => {
+    axios.get('day')
+        .then(response => {
+            let day = response.data.day
+            console.log(day)
+            setDay(day)
+        }).catch(error => {
+          console.log(error)
+          // toast.error('Could not connect to server. Please try again!')
+        })
+  }, []);
+
   const bogoFunc = (orderedObject) => {
     console.log('global var:', globalVar)
     console.log('inside bogo funciton')
-    const orderedObjectTemp = {...orderedObject}
+    // const orderedObjectTemp = {...orderedObject}
     let cartItemsCopied = [...cart.cartItems]
     console.log('cart length:', cartItemsCopied.length)
     if (cartItemsCopied.length <= 1) {
@@ -40,7 +54,7 @@ function App(props) {
     }
     else if (cartItemsCopied.length >= 2) {
       // for(let i=globalVar; i<=cartItemsCopied.length; i++) {
-        if (cartItemsCopied.length %2 != 0) {
+        if (cartItemsCopied.length %2 !== 0) {
           console.log('odd item')
           return
         } else {
@@ -72,7 +86,9 @@ function App(props) {
     toast.success('Added To Cart!');
     setCart(cartTemp)
     console.log('cart Length before:', cart.cartItems.length)
-    bogoFunc(orderedObject)
+    if (day === 2) {
+      bogoFunc(orderedObject)
+    }
   }
 
   const nameHandler = (event) => {
@@ -89,7 +105,7 @@ function App(props) {
 
   const [validated, setValidated] = useState(false);
 
-  let orderId = 1;
+  // let orderId = 1;
 
   const postOrder = () => {
     const data = { ...cart }
@@ -178,7 +194,7 @@ function App(props) {
               <Link to='/cart'>
                 <div className='icon-wrapper'>
                   <i className='fas fa-shopping-cart fa-3x cart'></i>
-                  <span className='badge'>{cart.cartItems.length != 0 ? cart.cartItems.length: null}</span>
+                  <span className='badge'>{cart.cartItems.length !== 0 ? cart.cartItems.length: null}</span>
                 </div>
               </Link>
               </Container>
@@ -208,8 +224,8 @@ function App(props) {
                 <div>
                 <span style={{fontWeight: '300'}}>Thank you for your order. We've received it at our end. Please note the below details: </span>
                 <div style={{margin: '15px 0'}}>
-                  <h4>Order No: <span>4{prevOrderDetails.price}</span></h4>
-                  <h4>Amount: <span className='rupee'>₹ </span><span>400{prevOrderDetails.price}</span></h4>
+                  <h4>Order No: <span>{prevOrderDetails.id}</span></h4>
+                  <h4>Amount: <span className='rupee'>₹ </span><span>{prevOrderDetails.price}</span></h4>
                 </div>
                 <span style={{fontWeight: '500'}}>Pay the above amount at the cash counter for your order to process.</span>
                 <br/><span style={{display: 'block', marginTop: '10px', fontWeight: '300'}}>Enjoy your meal!</span>

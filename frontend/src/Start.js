@@ -24,7 +24,7 @@ const Start = () => {
         }
     }
     let url = window.location.host
-    axios.defaults.baseURL = 'http://' + window.location.host + '/api/'
+    axios.defaults.baseURL = 'http://' + url + '/api/'
 
     return (
         <Auxiliary>
