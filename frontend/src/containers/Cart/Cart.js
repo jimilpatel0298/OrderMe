@@ -12,17 +12,8 @@ const Cart = (props) => {
 
     if (props.cart.cartItems.length !== 0) {
         cartItems = props.cart.cartItems.map((cartItem) => {
-            return <CartItem object={cartItem} key={cartItem.id} clearCart={props.clearCart}/>
+            return <CartItem object={cartItem} key={cartItem.kid} clearCart={props.clearCart}/>
         })
-    }
-
-    let cartPriceBogo = 0;
-    const cartPrice = () => {
-        props.cart.cartItems.forEach(element => {
-            if(element.bogo === false) {
-                cartPriceBogo = cartPriceBogo + element.totalPrice
-            }
-        });
     }
 
     return (
@@ -39,8 +30,7 @@ const Cart = (props) => {
                                     <h5>Total</h5>
                                 </Col>
                                 <Col xs={3} style={{ textAlign: 'right' }}>
-                                    {cartPrice()}
-                                    {props.cart.cartPrice === cartPriceBogo ? <h5 className='price'><span className='rupee'>₹ </span><span style={{fontWeight: '600'}}>{props.cart.cartPrice}</span></h5> : <div><h5 className='price' style={{textDecoration: 'line-through'}}><span className='rupee'>₹ </span>{props.cart.cartPrice}</h5><h5 className='price' style={{ marginTop: '7px' }}><span className='rupee'>₹ </span><span style={{fontWeight: '600'}}>{cartPriceBogo}</span></h5></div> }
+                                    {props.cart.cartPrice === props.cart.totalPrice ? <h5 className='price'><span className='rupee'>₹ </span><span style={{fontWeight: '600'}}>{props.cart.cartPrice}</span></h5> : <div><h5 className='price' style={{textDecoration: 'line-through', textDecorationThickness: '1px'}}><span className='rupee'>₹ </span>{props.cart.totalPrice}</h5><h5 className='price' style={{ marginTop: '7px' }}><span className='rupee'>₹ </span><span style={{fontWeight: '600'}}>{props.cart.cartPrice}</span></h5></div> }
                                 </Col>
                                 <Col xs={1} style={{ padding: '0 10px 0 0' }}>
                                     <button type="button" className="close" aria-label="Close" style={{ padding: '0px' }}

@@ -39,7 +39,7 @@ const CartItem = (props) => {
             </Col>
             <Col xs={3} style={{ textAlign: 'right' }}>
                 <Row>
-                <Col style={{marginRight: '3px'}}><h5 className='price' style={{ textDecoration: props.object.bogo ? 'line-through' : 'none' }}><span className='rupee'>₹ </span>{props.object.totalPrice}</h5></Col>
+                <Col style={{marginRight: '3px'}}><h5 className='price' style={props.object.bogo ? { textDecoration: 'line-through', textDecorationThickness: '1px'} : null}><span className='rupee'>₹ </span>{props.object.totalPrice}</h5></Col>
                 </Row>
                 {props.object.bogo ? 
                 <Row>

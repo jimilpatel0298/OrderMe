@@ -84,7 +84,7 @@ class Menu extends Component {
 
     itemAddHandler = (item, category) => {
         this.setState({ customization: true })
-        this.modalInfo = item
+        this.modalInfo = {...item}
         this.modalInfo['category'] = category
     }
 
@@ -113,7 +113,7 @@ class Menu extends Component {
                         handleClose={this.itemCancelHandler}
                         modalInfo={this.modalInfo} addToCartBtn={(orderedObject) => {
                             this.setState({ customization: false })
-                            this.props.addToCart(orderedObject)
+                            this.props.addToCart({...orderedObject})
                         }}
                         itemCancelHandler={this.itemCancelHandler} /> : null
                 }
