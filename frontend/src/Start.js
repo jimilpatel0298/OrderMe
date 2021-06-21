@@ -22,8 +22,15 @@ const Start = () => {
     }
     
     const checkPin = () => {
+        console.log('inside check pin')
         axios.post('pin', {"pin": pinInput}).then(response => {
             let data = response.data.pin
+            console.log('inside response', data)
+            if (data === true) {
+                setIsAuthenticated(true)
+            } else {
+                toast.error('WRONG PIN!!')
+            }
             return data
         }).catch(error => {
             toast.error('Could not connect to server. Please try again!')
@@ -32,13 +39,8 @@ const Start = () => {
     
     const pinSubmit = (event) => {
         event.preventDefault()
-        let check = checkPin()
-        
-        if(check) {
-            setIsAuthenticated(true)
-        } else if (check === false) {
-            toast.error('WRONG PIN!!')
-        }
+        console.log('inside pin submit')
+        checkPin()
     }
 
     let component = () => {
