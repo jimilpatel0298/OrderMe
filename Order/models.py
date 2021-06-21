@@ -60,6 +60,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=5, decimal_places=0, null=True)
     calories = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
     image = models.FileField(upload_to='image/', blank=True, null=True)
+    customizable = models.BooleanField(default=False, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, editable=True, null=True, blank=True)
 
@@ -133,6 +134,8 @@ class Order(models.Model):
     Cancelled = 'cancelled'
     Dispatched = 'dispatched'
     Tobepaid = 'tobepaid'
+    Paylater = 'paylater'
+    Prepared = 'prepared'
 
     person = models.ForeignKey(Person, related_name='order', on_delete=models.DO_NOTHING, null=True, blank=True)
     date_order = models.DateTimeField(auto_now_add=True)
@@ -143,7 +146,9 @@ class Order(models.Model):
         (Paid, 'Paid'),               # ( value, human readable-name)
         (Cancelled, 'Cancelled'),
         (Dispatched, 'Dispatched'),
-        (Tobepaid, 'Tobepaid')
+        (Tobepaid, 'Tobepaid'),
+        (Paylater, 'Paylater'),
+        (Prepared, 'Prepared')
     )
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default=Tobepaid)
     paid = models.FloatField(null=True, blank=True)
@@ -182,4 +187,10 @@ class AddonOrderItem(models.Model):
 class Time(models.Model):
     open_time = models.TimeField(auto_now_add=False, editable=True, null=True, blank=True)
     close_time = models.TimeField(auto_now=False, editable=True, null=True, blank=True)
+
+
+class Pin(models.Model):
+    passcode = models.CharField(max_length=10, default='2021', null=False, blank=False)
+    created_at = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True, editable=True, null=True, blank=True)
 

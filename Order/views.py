@@ -20,32 +20,6 @@ from rest_framework.status import HTTP_401_UNAUTHORIZED, HTTP_200_OK, HTTP_404_N
 # Create your views here.
 
 
-# @api_view(["POST"])
-# def add_category(request):
-#     if request.method == "POST":
-#         try:
-#             # print(json.loads(request.data))
-#             print(request.data)
-#             print(request.POST['name'])
-#             # temp = json.dumps(request.data)
-#             # print(temp)
-#
-#             size_serializer = SizeSerializer(data=request.data)
-#             if size_serializer.is_valid():
-#                 size_serializer.save()
-#             serializer = AddCategorySerializer(data=request.data)
-#             if serializer.is_valid():
-#                 serializer.save()
-#                 return Response(data={'message': 'Category Inserted', 'Category': serializer.data}, status=HTTP_201_CREATED)
-#             else:
-#                 return Response(data={'message': 'Category Already Exists', 'Category': serializer.data}, status=HTTP_401_UNAUTHORIZED)
-#
-#         except Exception as e:
-#             return Response(
-#                 data={"status": "Error", "message": "Error occurred while in saving Category", "data": {"error": str(e)}},
-#                 status=HTTP_400_BAD_REQUEST)
-
-
 def check_time(request):
     current_time = datetime.datetime.now()
     formatedTime = current_time.strftime("%H:%M:%S")
@@ -60,6 +34,34 @@ def check_time(request):
                   'Close Time: <b>{}</b></h2></center>'.format(open_time, close_time)
 
         return HttpResponse(message)
+
+
+# Get the current day
+@api_view(["GET"])
+def day(request):
+    try:
+        day = datetime.date.isoweekday(datetime.datetime.now()) % 7
+
+        return Response(data={"day": day}, status=HTTP_200_OK)
+    except Exception as e:
+        return Response(data={"status": "Error", "message": "Get Day Failed", "data": {"errors": str(e)}},
+                        status=HTTP_200_OK)
+
+
+# Get the current day
+@api_view(["POST"])
+def check_pin(request):
+    if request.method == "POST":
+        try:
+            pin = request.data['pin']
+            passcode = Pin.objects.last()
+            if pin == passcode.passcode:
+                return Response(data={"pin": True}, status=HTTP_200_OK)
+            else:
+                return Response(data={"pin": False}, status=HTTP_200_OK)
+        except Exception as e:
+            return Response(data={"status": "Error", "message": "Get Pin Failed", "data": {"errors": str(e)}},
+                            status=HTTP_200_OK)
 
 
 # Get the details of all product along with category
@@ -222,7 +224,8 @@ def event_stream():
                     'id': orderObj.id,
                     'status': orderObj.status,
                     'paid': orderObj.paid,
-                    'total': orderObj.total
+                    'total': orderObj.total,
+                    'paidStatus': orderObj.paid_status
                 }
                 for order_item in orderItems:
                     temp_obj = {
@@ -250,7 +253,7 @@ def event_stream():
                         temp_obj['itemAddons'].append(temp_addon)
                     dataObj['orderItems'].append(temp_obj)
 
-                if dataObj['order']['status'] == 'paid' or dataObj['order']['status'] == 'cancelled' or dataObj['order']['status'] == 'dispatched':
+                if dataObj['order']['status'] == 'paid' or dataObj['order']['status'] == 'cancelled' or dataObj['order']['status'] == 'dispatched' or dataObj['order']['status'] == 'prepared' or dataObj['order']['status'] == 'paylater':
                     time.sleep(1)
                     continue
 
@@ -303,11 +306,14 @@ def update_order_status(request, order_id):
             if request.data['status'] == 'paid':
                 order.paid_status = True
                 order.save()
+            elif request.data['status'] == 'paylater':
+                order.paid_status = False
+                order.save()
             elif request.data['status'] == 'cancelled':
                 order.paid_status = False
                 order.save()
             elif request.data['status'] == 'dispatched':
-                order.paid_status = True
+                # order.paid_status = True
                 order.complete_status = True
                 order.dispatched_status = True
                 order.save()

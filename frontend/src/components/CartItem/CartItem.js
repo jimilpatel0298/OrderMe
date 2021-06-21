@@ -37,7 +37,15 @@ const CartItem = (props) => {
                     addons()
                 }
             </Col>
-            <Col xs={3} style={{ textAlign: 'right' }}><h5>{props.object.totalPrice}</h5></Col>
+            <Col xs={3} style={{ textAlign: 'right' }}>
+                <Row>
+                <Col style={{marginRight: '3px'}}><h5 className='price' style={props.object.bogo ? { textDecoration: 'line-through', textDecorationThickness: '1px'} : null}><span className='rupee'>₹ </span>{props.object.totalPrice}</h5></Col>
+                </Row>
+                {props.object.bogo ? 
+                <Row>
+                    <Col style={{textAlign: 'right'}}><h5 className='free-badge'>free</h5></Col>
+                </Row> : null }
+            </Col>
             <Col xs={1} style={{padding: '0 10px 0 0'}}>
                 <button type="button" className="close" aria-label="Close" onClick={event => props.clearCart(event, props.object)}>
                     <span aria-hidden="true" className='remove-btn-cart' id='remove'>&times;</span>

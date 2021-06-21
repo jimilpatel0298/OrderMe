@@ -12,27 +12,45 @@ const MenuItem = (props) => {
     return (
         <div className='item'>
             <Row>
-                <Col xs={4}>
+                <Col xs={4} style={{paddingRight: '0px'}}>
                     <div className='item-image'>
                         {props.item.image == null ? <img src={defaultImage} alt='Product' /> :
                             <img src={image_url} alt='Product' />}
                     </div>
                 </Col>
-                <Col xs={8}>
-                    <div className='item-details'>
+                <Col xs={8} style={{paddingLeft: '0px'}}>
+                    <div className='item-details d-flex flex-column'>
                         <h4>{props.item.name}</h4>
                         <p>{props.item.description}</p>
+                        <div className='item-footer mt-auto'>
                         <Row>
                             <Col>
-                                <h5 className='price'><span className='rupee'>₹</span> {props.item.price}</h5>
+                                <h4 className='price'><span className='rupee'>₹</span> {props.item.price}</h4>
                             </Col>
-                            <Col>
-                                <Button className='btn-item-add' onClick={() => props.onAdd(props.item, props.category)}>Add</Button>
+                            <Col style={{textAlign: 'right'}}>
+                                {props.item.customizable === true ? 
+                                <Button className='btn-item-add' onClick={() => props.onAdd(props.item, props.category)}>Add<sup>+</sup></Button> :
+                                <Button className='btn-item-add' onClick={() => props.onAdd(props.item, props.category)}>Add</Button>}                                
                             </Col>
                         </Row>
+                        </div>
                     </div>
                 </Col>
             </Row>
+            {/* <div class="card mb-3" style={{maxWidth: '300px'}}>
+  <div class="row g-0">
+    <div class="col-4">
+      <img src={defaultImage} alt="..." />
+    </div>
+    <div class="col-8">
+      <div class="card-body">
+        <h5 class="card-title">Card title</h5>
+        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+      </div>
+    </div>
+  </div>
+</div> */}
         </div>
     )
 }

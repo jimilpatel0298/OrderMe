@@ -42,7 +42,7 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         # ordering = ["category"]
-        fields = ("id", "name", "price", "image", "description",)
+        fields = ("id", "name", "price", "image", "description", "customizable")
         # depth = 3
 
 
@@ -119,11 +119,11 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
 class OrderSerializer(serializers.ModelSerializer):
     orderitems = OrderItemSerializer(many=True, read_only=True)
-    name = serializers.ReadOnlyField(source="product.name", read_only=True, )
+    name = serializers.ReadOnlyField(source="product.name", read_only=True,)
 
     class Meta:
         model = Order
-        fields = ('id', 'name', 'status', 'paid', 'total', 'orderitems')
+        fields = ('id', 'name', 'status', 'paid', 'paid_status', 'total', 'orderitems')
         # fields = '__all__'
 
 

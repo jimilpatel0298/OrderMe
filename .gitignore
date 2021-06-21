@@ -4,7 +4,7 @@ migrations/
 __pycache__/
 db.sqlite3
 OrderMe/local_settings.py
-
+.vscode/
 media/
 # React Files Below
 # dependencies

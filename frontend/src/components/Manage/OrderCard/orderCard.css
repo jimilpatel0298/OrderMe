@@ -1,5 +1,5 @@
 .orderCard {
-    border-radius: 7px;
+    border-radius: 13px;
     margin-bottom: 1.5rem;
 }
 
@@ -7,23 +7,40 @@
     padding: 0 25px;
 }
 
-#orderCardBtn button {
-    width: 100%;
-    padding: 10px;
-    border-radius: 7px;
-}
-
 #orderCardBtn #cancel {
-    margin-bottom: 15px;
-    padding: 8px;
+    /* margin-bottom: 15px; */
+    border: none;
     color: #919aa1 !important;
     background-color: white !important;
 }
 
 #orderCardBtn #preparing {
-    border-color: #919aa1;
-    margin-bottom: 15px;
-    padding: 8px;
+    /* border-color: #919aa1; */
+    border: none;
+    /* margin-bottom: 15px; */
     color: #919aa1 !important;
     background-color: white !important;
+}
+
+#orderCardBtn button {
+    width: 100%;
+    padding: 8px !important;
+    border-radius: 50px;
+    margin: 0 0 8px 0;
+}
+
+.order-card-body {
+    padding: 1rem !important;
+}
+
+@media (min-width: 992px) {
+    .order-card-body {
+        padding: 1rem 1rem 0rem 1rem !important;
+    }
+}
+
+.card-header {
+    background-color: #fffdfd;
+    border-top-left-radius: 13px;
+    border-top-right-radius: 13px;
 }
