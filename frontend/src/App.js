@@ -189,7 +189,7 @@ function App(props) {
     cartTemp['totalPrice'] = cartTemp['totalPrice'] + orderedObjectCopied.totalPrice 
     cartTemp.cartItems.push(orderedObjectCopied)    
     console.log(orderedObjectCopied.size.name)
-    if (2 === 2 && orderedObjectCopied.size.name !== 'regular') {
+    if (day === 2 && orderedObjectCopied.size.name !== 'regular') {
       let kid = bogo({...orderedObjectCopied})
       let idIndex = null
       // bogoFunc(orderedObject)
@@ -244,6 +244,11 @@ function App(props) {
       prevOrderDetailsTemp.price = response.data.price
       setPrevOrderDetails(prevOrderDetailsTemp);
       setCart(clearCart);
+      setNullIndex(0)
+      setIndex(0)
+      setBogoArray(0)
+      setNullIndex(0)
+      setKidArray([])
       setValidated(false);
       props.history.replace('/order');
     }).catch(error => {
@@ -292,7 +297,7 @@ function App(props) {
       cartTemp.cartItems = filtered.filter(el => {
         return el.kid !== item.kid
       })
-      if (2 === 2  && item.size.name !== 'regular'){
+      if (day === 2 && item.size.name !== 'regular'){
         console.log('step 0')
         let retObj = bogoRemove({...item})
         console.log('step 3')
