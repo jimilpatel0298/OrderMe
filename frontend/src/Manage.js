@@ -291,7 +291,8 @@ class Manage extends Component {
             // },
         ],
         confirmation: false,
-        soundLoop: false
+        soundLoop: false,
+        day: null
     }
 
     sound = new Howl({
@@ -390,7 +391,7 @@ class Manage extends Component {
     displayOrders = () => {
         // display category block and items inside 
         const menu_items = this.state.orders.map(iteration => {
-            return <OrderCard statusHandler={this.statusHandler} order={iteration} key={iteration.order.id} soundStop={this.soundStop}/>
+            return <OrderCard statusHandler={this.statusHandler} order={iteration} key={iteration.order.id + iteration.contactDetails.id} soundStop={this.soundStop} day={this.state.day}/>
         });
 
         return menu_items
@@ -481,6 +482,15 @@ class Manage extends Component {
 
     componentDidMount = () => {
         this.landed = false
+        axios.get('day')
+        .then(response => {
+            let day = response.data.day
+            console.log(day)
+            this.setState({day: day})
+        }).catch(error => {
+          console.log(error)
+          // toast.error('Could not connect to server. Please try again!')
+        })
         this.fetchOrder()
     }
 
