@@ -244,8 +244,8 @@ function App(props) {
       prevOrderDetailsTemp.price = response.data.price
       setPrevOrderDetails(prevOrderDetailsTemp);
       setCart(clearCart);
-      setNullIndex(0)
       setIndex(0)
+      setIsNull(0)
       setBogoArray(0)
       setNullIndex(0)
       setKidArray([])
