@@ -8,70 +8,70 @@ import { toast } from 'react-toastify'
 
 const Customization = (props) => {
 
-    // const [itemData, setItemData] = useState(null)
+    const [itemData, setItemData] = useState(null)
 
-    const [itemData, setItemData] = useState(
-    {
-        id: props.modalInfo.id,
-        name: props.modalInfo.name,
-        size: [
-            {
-                id: 1,
-                name: 'regular',
-                price: 50,
-                purchased: true,
-                addons: [
-                    {
-                        id: 1,
-                        name: 'extra cheese',
-                        price: 20,
-                        purchased: false
-                    }
-                ]
-            },
-            {
-                id: 2,
-                name: "jumbo",
-                price: 80,
-                purchased: false,
-                addons: [
-                    {
-                        id: 2,
-                        name: 'extra cheese',
-                        price: 30,
-                        purchased: false
-                    },
-                    {
-                        id: 3,
-                        name: 'wheat bread',
-                        price: 10,
-                        purchased: false
-                    }
-                ]
-            }
-        ]
-    })
+    // const [itemData, setItemData] = useState(
+    // {
+    //     id: props.modalInfo.id,
+    //     name: props.modalInfo.name,
+    //     size: [
+    //         {
+    //             id: 1,
+    //             name: 'regular',
+    //             price: 50,
+    //             purchased: true,
+    //             addons: [
+    //                 {
+    //                     id: 1,
+    //                     name: 'extra cheese',
+    //                     price: 20,
+    //                     purchased: false
+    //                 }
+    //             ]
+    //         },
+    //         {
+    //             id: 2,
+    //             name: "jumbo",
+    //             price: 80,
+    //             purchased: false,
+    //             addons: [
+    //                 {
+    //                     id: 2,
+    //                     name: 'extra cheese',
+    //                     price: 30,
+    //                     purchased: false
+    //                 },
+    //                 {
+    //                     id: 3,
+    //                     name: 'wheat bread',
+    //                     price: 10,
+    //                     purchased: false
+    //                 }
+    //             ]
+    //         }
+    //     ]
+    // })
 
-    const [itemAddOns, setItemAddOns] = useState([
-        {
-            id: 1,
-            name: 'extra cheese',
-            price: 20,
-            purchased: false
-        }
-    ])
+    // const [itemAddOns, setItemAddOns] = useState([
+    //     {
+    //         id: 1,
+    //         name: 'extra cheese',
+    //         price: 20,
+    //         purchased: false
+    //     }
+    // ])
 
-    // const [itemAddOns, setItemAddOns] = useState(null)
+    const [itemAddOns, setItemAddOns] = useState(null)
 
     const [selectedItem, setSelectedItem] = useState({
         id: props.modalInfo.id,
         category: props.modalInfo.category,
         name: props.modalInfo.name,
         size: {
-            id: 1,
-                name: 'regular',
-                price: 50,
-                purchased: true,
+            // id: 1,
+            //     name: 'regular',
+            //     price: 50,
+            //     purchased: true,
         },
         addons: [],
         totalPrice: 0
