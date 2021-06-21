@@ -48,6 +48,22 @@ def day(request):
                         status=HTTP_200_OK)
 
 
+# Get the current day
+@api_view(["POST"])
+def check_pin(request):
+    if request.method == "POST":
+        try:
+            pin = request.data['pin']
+            passcode = Pin.objects.last()
+            if pin == passcode.passcode:
+                return Response(data={"pin": True}, status=HTTP_200_OK)
+            else:
+                return Response(data={"pin": False}, status=HTTP_200_OK)
+        except Exception as e:
+            return Response(data={"status": "Error", "message": "Get Pin Failed", "data": {"errors": str(e)}},
+                            status=HTTP_200_OK)
+
+
 # Get the details of all product along with category
 @api_view(["GET"])
 def product_details(request):
