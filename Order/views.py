@@ -132,7 +132,7 @@ def place_order(request):
                     for addon in item['addons']:
                         addon_obj = AddonOrderItem.objects.create(orderitem_id=orderitem.id, addon_id=addon['id'])
 
-            return Response(data={'message': 'Order Placed', 'order_id': order.id, 'price': order.total}, status=HTTP_201_CREATED)
+            return Response(data={'message': 'Order Placed', 'order_id': order.id, 'price': order.paid}, status=HTTP_201_CREATED)
 
             # # input time in seconds
             # t = 20  # 5 minutes
