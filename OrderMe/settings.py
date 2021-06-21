@@ -153,8 +153,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
-STATIC_ROOT = BASE_DIR / 'static'
-MEDIA_ROOT = BASE_DIR / 'media'
+STATIC_ROOT = BASE_DIR / 'static_backend'
+MEDIA_ROOT = BASE_DIR / 'media_backend'
 STATICFILES_DIRS = [
     BASE_DIR / 'frontend/build/static/'
 ]
