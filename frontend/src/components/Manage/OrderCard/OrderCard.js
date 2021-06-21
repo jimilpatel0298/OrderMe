@@ -31,7 +31,7 @@ const OrderCard = (props) => {
                     <Col lg={2}>Order No: <span className='bold'>{props.order.order.id}</span></Col>
                     <Col lg={2}>Items: <span className="bold">{props.order.orderItems.length}</span></Col>
                     <Col lg={5}>Contact: <span className="bold">{props.order.contactDetails.name} - {props.order.contactDetails.phone}</span></Col>
-                    <Col lg={3}>Amount: <span className="bold">{props.order.order.total}</span> - {props.order.order.paidStatus === true ? <span>Paid</span> : <span>Not Paid</span>}</Col>
+                    <Col lg={3}>Amount: <span className="bold">{props.order.order.paid}</span> <span style={{textDecoration: 'line-through', textDecorationThickness: '1px'}}> {props.day === 2 ? props.order.order.total : null} </span> - {props.order.order.paidStatus === true ? <span>Paid</span> : <span>Not Paid</span>}</Col>
                 </Row>
             </Card.Header>
             <Card.Body className='order-card-body'>
