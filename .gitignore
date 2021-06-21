@@ -5,7 +5,8 @@ __pycache__/
 db.sqlite3
 OrderMe/local_settings.py
 .vscode/
-media/
+static_backend/
+media_backend/
 # React Files Below
 # dependencies
 /node_modules
