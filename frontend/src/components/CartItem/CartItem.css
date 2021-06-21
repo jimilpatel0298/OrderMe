@@ -8,7 +8,35 @@
 }
 .remove-btn-cart {
     padding: 0;
-    font-size: 35px;
+    /* font-size: 30px; */
     position: relative;
-    top: -10px;
+    top: -6px;
+    color: #ab2621;
+    text-shadow: none !important;
+    opacity: 1 !important;
+}
+
+.free-badge {
+    margin-top: 5px;
+    /* text-align: right; */
+    /* position: relative; */
+    /* top: -10px; */
+    padding: 3px 0;
+    /* width: 70%; */
+    /* max-width: 70%; */
+    text-transform: lowercase;
+    border-radius: 30px;
+    /* border: 1px solid blue */
+    margin-left: 10px;
+    font-size: 11px;
+    color: #151e3d !important;
+    text-align: center !important;
+    background-color: #add8e6;
+}
+
+@media screen and (min-width: 400px) {
+    .free-badge {
+        max-width: 50%;
+        margin-left: auto;
+    }
 }

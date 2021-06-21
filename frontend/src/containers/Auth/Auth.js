@@ -3,23 +3,15 @@ import { Form, Button } from 'react-bootstrap'
 import Alert from '../../components/Alert/Alert'
 
 const Auth = (props) => {
-
-    const [pinInput, setPinInput] = useState('')
-
-    const inputHandler = (event) => {
-        let value = event.target.value
-        setPinInput(value)
-    }
-
     return (
         <div style={{ margin: 'auto', marginTop: '10vh', width: '300px' }}>
             <Alert variant='info' title='Enter PIN'>
-                <Form onSubmit={(event) => props.pinSubmit(event, pinInput) }>
+                <Form onSubmit={(event) => props.pinSubmit(event) }>
                     <Form.Group controlId="formGroupPassword">
-                        <Form.Control type="password" placeholder="Password" value={pinInput} onChange={inputHandler}/>
+                        <Form.Control type="password" placeholder="Password" value={props.pin} onChange={props.inputHandler} style={{borderRadius: '70px'}}/>
                     </Form.Group>
-                    <Button variant="primary" type="submit" as='div' style={{width: '100%'}} onClick={(event)=>{
-                        props.pinSubmit(event, pinInput);
+                    <Button variant="primary" type="submit" style={{width: '100%', borderRadius: '70px'}} onClick={(event)=>{
+                        props.pinSubmit(event);
                     }}>
                         Submit
                     </Button>

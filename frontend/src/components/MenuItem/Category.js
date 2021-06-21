@@ -5,7 +5,7 @@ const Category = (props) => {
     // display category title and its respective items 
     return (
         <div>
-            <h3>{props.title}</h3>
+            <h4 className='title-sticky'>{props.title}</h4>
             {
                 props.items.map((item, i) => {
                     // display menu item under selected category

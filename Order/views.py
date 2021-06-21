@@ -224,7 +224,8 @@ def event_stream():
                     'id': orderObj.id,
                     'status': orderObj.status,
                     'paid': orderObj.paid,
-                    'total': orderObj.total
+                    'total': orderObj.total,
+                    'paidStatus': orderObj.paid_status
                 }
                 for order_item in orderItems:
                     temp_obj = {
@@ -252,7 +253,7 @@ def event_stream():
                         temp_obj['itemAddons'].append(temp_addon)
                     dataObj['orderItems'].append(temp_obj)
 
-                if dataObj['order']['status'] == 'paid' or dataObj['order']['status'] == 'cancelled' or dataObj['order']['status'] == 'dispatched':
+                if dataObj['order']['status'] == 'paid' or dataObj['order']['status'] == 'cancelled' or dataObj['order']['status'] == 'dispatched' or dataObj['order']['status'] == 'prepared' or dataObj['order']['status'] == 'paylater':
                     time.sleep(1)
                     continue
 
@@ -305,11 +306,14 @@ def update_order_status(request, order_id):
             if request.data['status'] == 'paid':
                 order.paid_status = True
                 order.save()
+            elif request.data['status'] == 'paylater':
+                order.paid_status = False
+                order.save()
             elif request.data['status'] == 'cancelled':
                 order.paid_status = False
                 order.save()
             elif request.data['status'] == 'dispatched':
-                order.paid_status = True
+                # order.paid_status = True
                 order.complete_status = True
                 order.dispatched_status = True
                 order.save()

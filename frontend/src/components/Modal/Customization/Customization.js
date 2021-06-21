@@ -7,7 +7,11 @@ import Radio from './Radio'
 import { toast } from 'react-toastify'
 
 const Customization = (props) => {
+
     const [itemData, setItemData] = useState(null)
+
+    // const [itemData, setItemData] = useState(
+    // {
     //     id: props.modalInfo.id,
     //     name: props.modalInfo.name,
     //     size: [
@@ -48,7 +52,7 @@ const Customization = (props) => {
     //     ]
     // })
 
-    const [itemAddOns, setItemAddOns] = useState(null)
+    // const [itemAddOns, setItemAddOns] = useState([
     //     {
     //         id: 1,
     //         name: 'extra cheese',
@@ -56,6 +60,8 @@ const Customization = (props) => {
     //         purchased: false
     //     }
     // ])
+
+    const [itemAddOns, setItemAddOns] = useState(null)
 
     const [selectedItem, setSelectedItem] = useState({
         id: props.modalInfo.id,
@@ -110,8 +116,8 @@ const Customization = (props) => {
                     setItemData(itemDataTemp)
                 })
             }).catch(error => {
-                toast.error('Could not connect to server. Please try again later.')
-                props.itemCancelHandler();
+                toast.error('Could not connect to server. Please try again!')
+                // props.itemCancelHandler();
             })
         }
         fetchData();
@@ -177,22 +183,23 @@ const Customization = (props) => {
 
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        <h4 className='uppercase'>{props.modalInfo.name}</h4>
+                        <h4 className='uppercase' style={{fontSize: '17px'}}>{props.modalInfo.name}</h4>
                         <p className='category'>in {props.modalInfo.category}</p>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     {((itemData !== null) && (itemAddOns !== null))
-                        ? <><h5>Choose your size</h5>{chooseSize()}
-                            <h5 className='mt-3'>Add Ons</h5>{chooseAddons()}
+                        ? <>
+                        <h5 className='mb-2'>Size</h5>{chooseSize()}<hr />
+                        {itemAddOns.length !== 0 ? <><h5 className='mt-3 mb-2'>Add Ons</h5>{chooseAddons()}</> : null}
                         </>
                         : <p>loading...</p>
                     }
                 </Modal.Body>
                 <Modal.Footer>
-                    <h5 className='price' style={{ margin: 0, padding: 0, fontSize: '22px' }}><span className='rupee'>₹ </span>{selectedItem.totalPrice}</h5>
+                    <h5 className='price'><span className='rupee'>₹ </span>{selectedItem.totalPrice}</h5>
                     {/* <Button variant="secondary" onClick={props.handleClose}>Close</Button> */}
-                    <Button variant="primary"
+                    <Button variant="primary" className='btn-add-to-cart'
                         disabled={((itemData !== null) && (itemAddOns !== null)) ? false : true}
                         onClick={() => { props.addToCartBtn(selectedItem) }}>
                         Add To Cart

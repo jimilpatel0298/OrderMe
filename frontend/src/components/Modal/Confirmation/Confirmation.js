@@ -13,13 +13,13 @@ const Confirmation = (props) => {
           <Modal.Title>{props.modalInfo.messages.title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {props.modalInfo.messages.body}
+          <span style={{fontWeight: '300'}}>{props.modalInfo.messages.body}</span>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={props.handleClose}>
+        <Modal.Footer className='confirmation-modal-footer'>
+          <Button variant="secondary" style={{padding: '8px 40px', margin: '0'}} onClick={props.handleClose}>
             No
           </Button>
-          <Button variant="primary" onClick={(event) => props.modalInfo.messages.button(event, props.modalInfo)}>Yes</Button>
+          <Button variant="primary" style={{padding: '8px 40px', margin: '0', borderBottomRightRadius: '13px'}} onClick={(event) => props.modalInfo.messages.button(event, props.modalInfo)}>Yes</Button>
         </Modal.Footer>
       </Modal>
     )

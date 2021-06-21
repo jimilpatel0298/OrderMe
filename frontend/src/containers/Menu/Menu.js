@@ -19,7 +19,7 @@ class Menu extends Component {
             //             name: 'Spicy Paneer Schezwan',
             //             image: null,
             //             description: 'Cheese blend with mayo',
-            //             price: 100
+            //             price: 100,
             //         },
             //         {
             //             id: 2,
@@ -76,7 +76,7 @@ class Menu extends Component {
             stateTemp.menuItems = response.data.data.menuItems
             this.setState(stateTemp)
         }).catch(error => {
-            toast.error('Could not connect to server. Please try again later.')
+            toast.error('Could not connect to server. Please try again!')
         })
     }
 
@@ -84,7 +84,7 @@ class Menu extends Component {
 
     itemAddHandler = (item, category) => {
         this.setState({ customization: true })
-        this.modalInfo = item
+        this.modalInfo = {...item}
         this.modalInfo['category'] = category
     }
 
@@ -105,7 +105,7 @@ class Menu extends Component {
         return (
             <Auxiliary>
                 {
-                    (this.state.menuItems.length !==0 ) ? this.displayMenu() : <h4 className='text-center'>No items to display. <br />Please check back later.</h4>
+                    (this.state.menuItems.length !==0 ) ? this.displayMenu() : <h5 className='text-center' style={{ fontStyle: 'italic'}}>Loading... Please wait!</h5>
                 }
                 {
                     this.state.customization ? <Customization
@@ -113,7 +113,7 @@ class Menu extends Component {
                         handleClose={this.itemCancelHandler}
                         modalInfo={this.modalInfo} addToCartBtn={(orderedObject) => {
                             this.setState({ customization: false })
-                            this.props.addToCart(orderedObject)
+                            this.props.addToCart({...orderedObject})
                         }}
                         itemCancelHandler={this.itemCancelHandler} /> : null
                 }
