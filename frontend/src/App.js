@@ -46,6 +46,8 @@ function App(props) {
   const [kidArray, setKidArray] = useState([])
 
   const bogo = (addedItem) => {
+    console.log(bogoArray.length)
+    console.log(bogoArray)
     if (bogoArray.length === 0) {
       console.log('First Time')
       console.log('inside first time if')
@@ -207,6 +209,7 @@ function App(props) {
     console.log('cart Length before:', cart.cartItems.length)
     // console.log(cart)
     toast.success('Added To Cart!');
+    setKidArray(kidArrayTemp)
     setCart(cartTemp)
   }
 
@@ -246,7 +249,7 @@ function App(props) {
       setCart(clearCart);
       setIndex(0)
       setIsNull(0)
-      setBogoArray(0)
+      setBogoArray([])
       setNullIndex(0)
       setKidArray([])
       setValidated(false);
