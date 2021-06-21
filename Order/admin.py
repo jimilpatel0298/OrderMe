@@ -5,6 +5,7 @@ from .models import *
 
 admin.site.register(QrCode)
 admin.site.register(Time)
+admin.site.register(Pin)
 # admin.site.register(Person)
 # admin.site.register(Order)
 # admin.site.register(OrderItem)
