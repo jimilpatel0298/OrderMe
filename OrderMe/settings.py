@@ -161,3 +161,4 @@ MEDIA_ROOT = BASE_DIR / 'media_backend'
 STATICFILES_DIRS = [
     BASE_DIR / 'frontend/build/static/'
 ]
+
