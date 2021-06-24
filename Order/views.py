@@ -68,7 +68,7 @@ def check_pin(request):
 @api_view(["GET"])
 def product_details(request):
     try:
-        categories = Category.objects.all()
+        categories = Category.objects.exclude(products__isnull=True).exclude(products__stock_out=True)
         serializer = CategorySerializer(categories, many=True)
 
         return Response(data={"status": "Success", "message": "Products found", "data": {"menuItems": serializer.data}},

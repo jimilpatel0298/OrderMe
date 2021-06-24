@@ -3,7 +3,7 @@ from .models import *
 
 # Register your models here.
 
-admin.site.register(QrCode)
+# admin.site.register(QrCode)
 admin.site.register(Time)
 admin.site.register(Pin)
 # admin.site.register(Person)
@@ -19,7 +19,7 @@ admin.site.register(Pin)
 
 class CategoryAdmin(admin.ModelAdmin):
     model = Product
-    list_display = ('id', 'type', 'created_at', 'updated_at',)
+    list_display = ('id', 'type')
 
 
 admin.site.register(Category, CategoryAdmin)
@@ -27,7 +27,7 @@ admin.site.register(Category, CategoryAdmin)
 
 class ProductAdmin(admin.ModelAdmin):
     model = Product
-    list_display = ('id', 'category', 'name',)
+    list_display = ('id', 'category', 'name', 'stock_out')
 
 
 admin.site.register(Product, ProductAdmin)
@@ -39,14 +39,6 @@ class SizeAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Size, SizeAdmin)
-
-
-class ProductSizeAdmin(admin.ModelAdmin):
-    model = ProductSize
-    list_display = ('id', 'product', 'size', )
-
-
-admin.site.register(ProductSize, ProductSizeAdmin)
 
 
 class AddonAdmin(admin.ModelAdmin):
@@ -67,7 +59,7 @@ admin.site.register(Person, PersonAdmin)
 
 class OrderAdmin(admin.ModelAdmin):
     model = Order
-    list_display = ('id', 'person', 'status', 'complete_status', 'paid_status', 'dispatched_status', 'paid', 'total')
+    list_display = ('id', 'person', 'status', 'complete_status', 'paid_status', 'paid', 'total', 'created_at')
 
 
 admin.site.register(Order, OrderAdmin)
