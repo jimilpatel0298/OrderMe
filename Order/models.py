@@ -65,6 +65,9 @@ class Product(models.Model):
     updated_at = models.DateTimeField(auto_now=True, editable=True)
     stock_out = models.BooleanField(default=False)
 
+    class Meta:
+        ordering = ['price']
+
     def __str__(self):
         return self.name.title() + ' > ' + 'category: ' + self.category.type
 
