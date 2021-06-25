@@ -1,7 +1,7 @@
 from django.db import models
-import qrcode
-from io import BytesIO
-from django.core.files import File
+# import qrcode
+# from io import BytesIO
+# from django.core.files import File
 # from PIL import Image, ImageDraw
 
 # Create your models here.
@@ -48,9 +48,8 @@ class Category(models.Model):
     def __str__(self):
         return self.type.title()
 
-    # @property
-    # def categories(self):
-    #     return self.product_set.all()
+    # def current_product(self):
+    #     return Product.objects.filter(stock_out=False)
 
 
 class Product(models.Model):
@@ -65,8 +64,13 @@ class Product(models.Model):
     updated_at = models.DateTimeField(auto_now=True, editable=True)
     stock_out = models.BooleanField(default=False)
 
-    class Meta:
-        ordering = ['price']
+    # class Meta:
+    #     ordering = ['price']
+
+    # @property
+    # def current_product(self):
+    #     product = Product.objects.exclude(stock_out=True)
+    #     return product
 
     def __str__(self):
         return self.name.title() + ' > ' + 'category: ' + self.category.type
