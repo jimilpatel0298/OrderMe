@@ -22,8 +22,8 @@
     object-fit: cover;
     width: 100%;
     height: 98%;
-    border-top-left-radius: 13px;
-    border-bottom-left-radius: 13px;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
 }
 
 .item .item-details {
