@@ -11,58 +11,58 @@ class Menu extends Component {
     // }
     state = {
         menuItems: [
-            // {
-            //     type: 'sandwiches',
-            //     products: [
-            //         {
-            //             id: 1,
-            //             name: 'Spicy Paneer Schezwan',
-            //             image: null,
-            //             description: 'Cheese blend with mayo',
-            //             price: 100,
-            //         },
-            //         {
-            //             id: 2,
-            //             name: 'Tandoori Panner',
-            //             image: null,
-            //             description: 'Panner blend with tandoori sauce',
-            //             price: 150
-            //         }
-            //     ]
-            // },
-            // {
-            //     type: 'bread pizzas',
-            //     products: [
-            //         {
-            //             id: 3,
-            //             name: 'Say Cheese!',
-            //             image: null,
-            //             description: 'Just Cheese Pizza',
-            //             price: 59
-            //         },
-            //         {
-            //             id: 4,
-            //             name: 'Cheesy Veg',
-            //             image: null,
-            //             description: 'Just Cheese Pizza',
-            //             price: 79
-            //         },
-            //         {
-            //             id: 5,
-            //             name: 'Paneer Cheese!',
-            //             image: null,
-            //             description: 'Just Cheese Pizza',
-            //             price: 59
-            //         },
-            //         {
-            //             id: 6,
-            //             name: 'Veg',
-            //             image: null,
-            //             description: 'Just Cheese Pizza',
-            //             price: 79
-            //         }
-            //     ]
-            // }
+            {
+                type: 'sandwiches',
+                products: [
+                    {
+                        id: 1,
+                        name: 'Spicy Paneer Schezwan',
+                        image: null,
+                        description: 'Cheese blend with mayo',
+                        price: 100,
+                    },
+                    {
+                        id: 2,
+                        name: 'Tandoori Panner',
+                        image: null,
+                        description: 'Panner blend with tandoori sauce',
+                        price: 150
+                    }
+                ]
+            },
+            {
+                type: 'bread pizzas',
+                products: [
+                    {
+                        id: 3,
+                        name: 'Say Cheese!',
+                        image: null,
+                        description: 'Just Cheese Pizza',
+                        price: 59
+                    },
+                    {
+                        id: 4,
+                        name: 'Cheesy Veg',
+                        image: null,
+                        description: 'Just Cheese Pizza',
+                        price: 79
+                    },
+                    {
+                        id: 5,
+                        name: 'Paneer Cheese!',
+                        image: null,
+                        description: 'Just Cheese Pizza',
+                        price: 59
+                    },
+                    {
+                        id: 6,
+                        name: 'Veg',
+                        image: null,
+                        description: 'Just Cheese Pizza',
+                        price: 79
+                    }
+                ]
+            }
         ],
         customization: false,
         cart: []

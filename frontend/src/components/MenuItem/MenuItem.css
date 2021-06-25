@@ -6,7 +6,8 @@
     /* border: 1px solid black; */
     height: 110px;
     /* max-width: 540px; */
-    /* border: 1px solid #af5b1c; */
+    border: 1px solid rgba(175, 91, 28, 0.2);
+    border-radius: 13px;
 
 }
 
@@ -29,7 +30,7 @@
     /* padding-left: 15px; */
     background-color: #fffdfd;
     padding: 5px 2px 5px 10px;
-    height: 100%;
+    height: 98%;
     border-top-right-radius: 13px;
     border-bottom-right-radius: 13px;
     /* border: 1px solid #af5b1c; */
@@ -42,8 +43,9 @@
 
 .item .btn-item-add {
     padding: 4px 30px;
+    margin-right: 3px;
     font-size: 12px;
-    border-radius: 6px;
+    border-radius: 8px;
 }
 
 .price {
