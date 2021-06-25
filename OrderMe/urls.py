@@ -36,5 +36,8 @@ urlpatterns = [
     # re_path(r'.*', TemplateView.as_view(template_name='index.html')),
 ]
 
+admin.site.site_title = "BreadBites Admin"
+admin.site.site_header = "BreadBites Admin"
+
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
