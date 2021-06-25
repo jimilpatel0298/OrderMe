@@ -1,3 +1,5 @@
+from abc import ABC
+
 from rest_framework import serializers
 from .models import *
 
@@ -34,6 +36,14 @@ class CustomSerializer(Serializer):
         super(CustomSerializer, self).end_object(obj)
 
 
+# For filtering the products whose is not stocked out
+class FilteredProductSerializer(serializers.ListSerializer):
+
+    def to_representation(self, data):
+        data = data.filter(stock_out=False).order_by('price')
+        return super(FilteredProductSerializer, self).to_representation(data)
+
+
 class ProductSerializer(serializers.ModelSerializer):
     # queryset = Category.objects.all()
     # if queryset is not None:
@@ -41,13 +51,14 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
+        list_serializer_class = FilteredProductSerializer
         # ordering = ["category"]
         fields = ("id", "name", "price", "image", "description", "customizable")
         # depth = 3
 
 
 class CategorySerializer(serializers.ModelSerializer):
-    products = ProductSerializer(many=True, read_only=True)
+    products = ProductSerializer(many=True, read_only=True,)
 
     class Meta:
         model = Category
@@ -142,3 +153,4 @@ class OrderUpdateSerializer(serializers.ModelSerializer):
         model = Order
         fields = ('status',)
         # fields = '__all__'
+
