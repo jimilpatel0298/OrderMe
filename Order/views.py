@@ -112,7 +112,6 @@ def get_addons(requests, size_id):
 def place_order(request):
     if request.method == "POST":
         try:
-            print(request.data)
             order = Order.objects.create(total=request.data['totalPrice'], paid=request.data['cartPrice'])
             person = Person.objects.create(name=request.data['contactDetails']['name'], phone=request.data['contactDetails']['phone'])
             order.person = person
