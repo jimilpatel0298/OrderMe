@@ -112,10 +112,9 @@ def get_addons(requests, size_id):
 def place_order(request):
     if request.method == "POST":
         try:
-            order = Order.objects.create(total=request.data['totalPrice'], paid=request.data['cartPrice'])
             person = Person.objects.create(name=request.data['contactDetails']['name'], phone=request.data['contactDetails']['phone'])
-            order.person = person
-            order.save()
+            order = Order.objects.create(total=request.data['totalPrice'], paid=request.data['cartPrice'], person=person)
+            # order.save()
 
             for item in request.data['cartItems']:
                 category = Category.objects.get(type=item['category'])
@@ -228,9 +227,9 @@ def event_stream():
                         'paidStatus': orderObj.paid_status
                     }
 
-                    if dataObj['order']['status'] == 'paid' or dataObj['order']['status'] == 'cancelled' or dataObj['order']['status'] == 'dispatched' or dataObj['order']['status'] == 'prepared' or dataObj['order']['status'] == 'paylater':
-                        time.sleep(1)
-                        continue
+                    # if dataObj['order']['status'] == 'paid' or dataObj['order']['status'] == 'cancelled' or dataObj['order']['status'] == 'dispatched' or dataObj['order']['status'] == 'prepared' or dataObj['order']['status'] == 'paylater':
+                    #     time.sleep(1)
+                    #     continue
 
                     personObj = Person.objects.get(id=orderObj.person.id)
                     orderItems = OrderItem.objects.filter(order=orderObj)
