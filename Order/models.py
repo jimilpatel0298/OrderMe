@@ -105,8 +105,8 @@ class Addon(models.Model):
 
 
 class Person(models.Model):
-    name = models.CharField(max_length=255)
-    phone = models.CharField(max_length=10)
+    name = models.CharField(max_length=255, null=True, blank=True)
+    phone = models.CharField(max_length=10, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, editable=True, null=True, blank=True)
 
@@ -130,11 +130,11 @@ class Order(models.Model):
     Paylater = 'paylater'
     Prepared = 'prepared'
 
-    person = models.ForeignKey(Person, related_name='order', on_delete=models.DO_NOTHING)
-    date_order = models.DateTimeField(auto_now_add=True)
-    complete_status = models.BooleanField(default=False)
-    paid_status = models.BooleanField(default=False)
-    dispatched_status = models.BooleanField(default=False)
+    person = models.ForeignKey(Person, related_name='order', on_delete=models.DO_NOTHING, null=True, blank=True)
+    date_order = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    complete_status = models.BooleanField(default=False, null=True, blank=True)
+    paid_status = models.BooleanField(default=False, null=True, blank=True)
+    dispatched_status = models.BooleanField(default=False, null=True, blank=True)
     STATUS_CHOICES = (
         (Paid, 'Paid'),               # ( value, human readable-name)
         (Cancelled, 'Cancelled'),
@@ -143,9 +143,9 @@ class Order(models.Model):
         (Paylater, 'Paylater'),
         (Prepared, 'Prepared')
     )
-    status = models.CharField(max_length=100, choices=STATUS_CHOICES, default=Tobepaid)
-    paid = models.FloatField()
-    total = models.FloatField()
+    status = models.CharField(max_length=100, choices=STATUS_CHOICES, default=Tobepaid, null=True, blank=True)
+    paid = models.FloatField(null=True, blank=True)
+    total = models.FloatField(null=True, blank=True)
     # transaction_id = models.CharField(max_length=200, null=True)
     # invoice = models.FileField(upload_to='invoices/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
@@ -159,11 +159,11 @@ class Order(models.Model):
 
 
 class OrderItem(models.Model):
-    category = models.ForeignKey(Category, related_name='category', on_delete=models.DO_NOTHING)
-    product = models.ForeignKey(Product, related_name='product_orderitem', on_delete=models.DO_NOTHING)
-    order = models.ForeignKey(Order, related_name='orderitems', on_delete=models.DO_NOTHING)
-    size = models.ForeignKey(Size,  related_name='item_size', on_delete=models.DO_NOTHING)
-    total = models.FloatField()
+    category = models.ForeignKey(Category, related_name='category', on_delete=models.DO_NOTHING, null=True, blank=True)
+    product = models.ForeignKey(Product, related_name='product_orderitem', on_delete=models.DO_NOTHING, null=True, blank=True)
+    order = models.ForeignKey(Order, related_name='orderitems', on_delete=models.DO_NOTHING, null=True, blank=True)
+    size = models.ForeignKey(Size,  related_name='item_size', on_delete=models.DO_NOTHING, null=True, blank=True)
+    total = models.FloatField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, editable=True, null=True, blank=True)
 
@@ -172,8 +172,8 @@ class OrderItem(models.Model):
 
 
 class AddonOrderItem(models.Model):
-    orderitem = models.ForeignKey(OrderItem, related_name='item_addons', on_delete=models.DO_NOTHING)
-    addon = models.ForeignKey(Addon, related_name='addon_addon_order_item', on_delete=models.DO_NOTHING)
+    orderitem = models.ForeignKey(OrderItem, related_name='item_addons', on_delete=models.DO_NOTHING, null=True, blank=True)
+    addon = models.ForeignKey(Addon, related_name='addon_addon_order_item', on_delete=models.DO_NOTHING, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, editable=False, null=True, blank=True)
     updated_at = models.DateTimeField(auto_now=True, editable=True, null=True, blank=True)
 
