@@ -1,6 +1,7 @@
 import React from 'react'
 import { Navbar, Container, Nav } from 'react-bootstrap'
 import logo from '../../images/name_transparent.png'
+import close from '../../images/close.png'
 
 const Header = (props) => {
     return (
@@ -11,6 +12,8 @@ const Header = (props) => {
                 <Nav className='ml-auto'>
                     <h5 style={{padding: '0px', margin: '0px', textTransform: 'uppercase'}}>{props.title}</h5>
                     </Nav> 
+                    {props.title === 'manage' ? <img src={close} alt='close manage' style={{marginLeft: '10px', width: '35px'}} onClick={props.closeManage} /> : null} 
+
 
                     {/* <a href='/'><Navbar.Brand><img src={logo} className='img-logo' /></Navbar.Brand></a> */}
                     {/* <Navbar.Toggle aria-controls="responsive-navbar-nav" /> */}
