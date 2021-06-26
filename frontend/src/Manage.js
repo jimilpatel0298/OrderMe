@@ -465,9 +465,13 @@ class Manage extends Component {
         })
 
         let source = new EventSource(`http://${window.location.host}/api/get_latest_order`);
+        // let source = new EventSource(`http://127.0.0.1:8000/api/get_latest_order`);
         source.onmessage = e => {
             console.log(e)
-            if (this.landed === true) {
+            var data = JSON.parse(e.data)
+            if (data === -1) {
+                window.location.reload()
+            } else if (this.landed === true && data !== -1) {
                 this.orderData(JSON.parse(e.data), true)
                 this.soundPlay()
             }
@@ -478,6 +482,14 @@ class Manage extends Component {
             toast.error('Could not connect to server. Please try again later.')
         }
 
+    }
+
+    closeManage = () => {
+        axios.post('http://127.0.0.1:8000/api/close', {manage_toggle: true}).then(response => {
+            window.location.reload()
+        }).catch(error => {
+          toast.error('Could not connect to server. Please try again!')
+        })
     }
 
     componentDidMount = () => {
@@ -492,12 +504,19 @@ class Manage extends Component {
           // toast.error('Could not connect to server. Please try again!')
         })
         this.fetchOrder()
+
+        // window.addEventListener("beforeunload", (ev) => 
+        // {  
+        //     ev.preventDefault();
+        //     alert('are you sure?')
+            // return ev.returnValue = 'Are you sure you want to close?';
+        // });
     }
 
     render() {
         return (
             <Auxiliary>
-                <Header title='manage' />
+                <Header title='manage' closeManage={this.closeManage}/>
                 <ToastContainer
                     position="top-center"
                     transition={Bounce}

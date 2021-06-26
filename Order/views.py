@@ -18,6 +18,7 @@ from rest_framework.status import HTTP_401_UNAUTHORIZED, HTTP_200_OK, HTTP_404_N
 
 # Create your views here.
 
+manage_toggle = False
 
 def check_time(request):
     current_time = datetime.datetime.now()
@@ -55,12 +56,29 @@ def check_pin(request):
             pin = request.data['pin']
             passcode = Pin.objects.last()
             if pin == passcode.passcode:
+                global manage_toggle
+                manage_toggle = True
                 return Response(data={"pin": True}, status=HTTP_200_OK)
             else:
                 return Response(data={"pin": False}, status=HTTP_200_OK)
         except Exception as e:
             return Response(data={"status": "Error", "message": "Get Pin Failed", "data": {"errors": str(e)}},
                             status=HTTP_200_OK)
+
+
+@api_view(["POST"])
+def close_event_stream(request):
+    if request.method == "POST":
+        try:
+            toggle = request.data['manage_toggle']
+            if toggle:
+                global manage_toggle
+                manage_toggle = False
+                return Response(status=HTTP_200_OK)
+
+        except Exception as e:
+            return Response(data={"status": "Error", "message": "Closing Event Stream Failed", "data": {"errors": str(e)}},
+                            status=HTTP_400_BAD_REQUEST)
 
 
 # Get the details of all product along with category
@@ -200,8 +218,17 @@ def event_stream():
     order_id_number = 0
 
     try:
-        while True:
+        print(manage_toggle)
 
+        if manage_toggle == False:
+            json_string = json.dumps(-1)
+            data = json_string
+            if not initial_data == data:
+                yield "\ndata: {}\n\n".format(data)
+                initial_data = data
+            time.sleep(1)
+
+        while manage_toggle:
             def toDict(obj):
                 return model_to_dict(obj)
 
