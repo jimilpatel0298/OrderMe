@@ -199,6 +199,7 @@ def get_order_details(requests):
 
 def event_stream():
     initial_data = ''
+    order_id_number = 0
 
     try:
         while True:
@@ -208,62 +209,71 @@ def event_stream():
 
             print(Order.objects.all().exists())
             if Order.objects.all().exists():
-                print('inside if')
-                dataObj = {
-                    'contactDetails': {},
-                    'order': {},
-                    'orderItems': []
-                }
                 newOrder = Order.objects.last().id
-                orderObj = Order.objects.get(id=newOrder)
-                personObj = Person.objects.get(id=orderObj.person.id)
-                orderItems = OrderItem.objects.filter(order=orderObj)
-
-                dataObj['contactDetails'] = toDict(personObj)
-                dataObj['order'] = {
-                    'id': orderObj.id,
-                    'status': orderObj.status,
-                    'paid': orderObj.paid,
-                    'total': orderObj.total,
-                    'paidStatus': orderObj.paid_status
-                }
-                for order_item in orderItems:
-                    temp_obj = {
-                        'id': order_item.id,
-                        'name': order_item.product.name,
-                        'category': order_item.category.type,
-                        'product': order_item.product.id,
-                        'order': orderObj.id,
-                        'total': order_item.total,
-                        'itemSize': {
-                            'id': order_item.size.id,
-                            'name': order_item.size.name,
-                            'price': order_item.size.price
-                        },
-                        'itemAddons': []
+                print('inside 1st if')
+                if order_id_number == 0 or order_id_number != newOrder:
+                    print('inside 2nd if')
+                    order_id_number = newOrder
+                    dataObj = {
+                        'contactDetails': {},
+                        'order': {},
+                        'orderItems': []
                     }
-                    itemAddons = AddonOrderItem.objects.filter(orderitem=order_item)
-                    for item_addon in itemAddons:
-                        temp_addon = {
-                            'id': item_addon.id,
-                            'addon': item_addon.addon.id,
-                            'name': item_addon.addon.name,
-                            'price': item_addon.addon.price
-                        }
-                        temp_obj['itemAddons'].append(temp_addon)
-                    dataObj['orderItems'].append(temp_obj)
+                    orderObj = Order.objects.get(id=newOrder)
 
-                if dataObj['order']['status'] == 'paid' or dataObj['order']['status'] == 'cancelled' or dataObj['order']['status'] == 'dispatched' or dataObj['order']['status'] == 'prepared' or dataObj['order']['status'] == 'paylater':
+                    dataObj['order'] = {
+                        'id': orderObj.id,
+                        'status': orderObj.status,
+                        'paid': orderObj.paid,
+                        'total': orderObj.total,
+                        'paidStatus': orderObj.paid_status
+                    }
+
+                    if dataObj['order']['status'] == 'paid' or dataObj['order']['status'] == 'cancelled' or dataObj['order']['status'] == 'dispatched' or dataObj['order']['status'] == 'prepared' or dataObj['order']['status'] == 'paylater':
+                        time.sleep(1)
+                        continue
+
+                    personObj = Person.objects.get(id=orderObj.person.id)
+                    orderItems = OrderItem.objects.filter(order=orderObj)
+
+                    dataObj['contactDetails'] = toDict(personObj)
+
+                    for order_item in orderItems:
+                        temp_obj = {
+                            'id': order_item.id,
+                            'name': order_item.product.name,
+                            'category': order_item.category.type,
+                            'product': order_item.product.id,
+                            'order': orderObj.id,
+                            'total': order_item.total,
+                            'itemSize': {
+                                'id': order_item.size.id,
+                                'name': order_item.size.name,
+                                'price': order_item.size.price
+                            },
+                            'itemAddons': []
+                        }
+                        itemAddons = AddonOrderItem.objects.filter(orderitem=order_item)
+                        for item_addon in itemAddons:
+                            temp_addon = {
+                                'id': item_addon.id,
+                                'addon': item_addon.addon.id,
+                                'name': item_addon.addon.name,
+                                'price': item_addon.addon.price
+                            }
+                            temp_obj['itemAddons'].append(temp_addon)
+                        dataObj['orderItems'].append(temp_obj)
+
+                    json_string = json.dumps(dataObj)
+                    data = json_string
+                    print(data)
+                    if not initial_data == data:
+                        yield "\ndata: {}\n\n".format(data)
+                        initial_data = data
+                    time.sleep(1)
+                else:
                     time.sleep(1)
                     continue
-
-                json_string = json.dumps(dataObj)
-                data = json_string
-                print(data)
-                if not initial_data == data:
-                    yield "\ndata: {}\n\n".format(data)
-                    initial_data = data
-                time.sleep(1)
             else:
                 json_string = json.dumps({'data': 0})
                 data = json_string
@@ -273,7 +283,7 @@ def event_stream():
                 time.sleep(1)
 
     except Exception as e:
-        print('exception', e)
+        print('exception of while', e)
 
 
 def get_latest_order(requests):
@@ -285,6 +295,7 @@ def get_latest_order(requests):
         return response
     except Exception as e:
         response = HttpResponseBadRequest('Invalid request: %s.\n' % str(e))
+        print('exception of get_latest_order', e)
         return response
 
 
