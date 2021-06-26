@@ -485,7 +485,7 @@ class Manage extends Component {
     }
 
     closeManage = () => {
-        axios.post('http://127.0.0.1:8000/api/close', {manage_toggle: true}).then(response => {
+        axios.post('close', {manage_toggle: true}).then(response => {
             window.location.reload()
         }).catch(error => {
           toast.error('Could not connect to server. Please try again!')
