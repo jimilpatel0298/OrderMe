@@ -499,7 +499,7 @@ class Manage extends Component {
         source.onerror = e => {
             console.log('event source error', e)
             toast.error('Could not connect to server. Please try again later.')
-            window.location.reload()
+            // window.location.reload()
         }
 
     }
