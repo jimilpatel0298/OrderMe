@@ -406,7 +406,7 @@ class Manage extends Component {
             if (ordersTemp.some(element => element.order.id === newOrder.order.id)) {
                 console.log('exists order already')
                 return false
-            } else if (newOrder.order.status === 'cancelled' && newOrder.order.status === 'dispatched') {
+            } else if (newOrder.order.status === 'cancelled' || newOrder.order.status === 'dispatched') {
                 console.log('cancelled or dispatched')
                 return false
             } else {
