@@ -10,8 +10,8 @@ import { ToastContainer, toast, Bounce } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Start = () => {
-    // let url = window.location.host
-    let url = '127.0.0.1:8000'
+    let url = window.location.host
+    // let url = '127.0.0.1:8000'
     axios.defaults.baseURL = 'http://' + url + '/api/'
     
     const [isAuthenticated, setIsAuthenticated] = useState(false)
