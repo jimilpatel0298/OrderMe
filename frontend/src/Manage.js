@@ -401,15 +401,18 @@ class Manage extends Component {
         let ordersTemp = [...this.state.orders]
 
         if (single === true) {
+            console.log('inside if of single true')
             let newOrder = { ...response }
-            const exists =  ordersTemp.some(el => el.order.id === newOrder.order.id)
-            console.log(exists)
-            if (!exists && (newOrder.order.status !== 'cancelled' && newOrder.order.status !== 'dispatched')) {
-                ordersTemp.unshift(newOrder)
-            } else {
+            if (ordersTemp.some(element => element.order.id === newOrder.order.id)) {
+                console.log('exists order already')
                 return false
+            } else if (newOrder.order.status === 'cancelled' && newOrder.order.status === 'dispatched') {
+                console.log('cancelled or dispatched')
+                return false
+            } else {
+                console.log('inside else unshift')
+                ordersTemp.unshift(newOrder)
             }
-
         } else {
             let serverOrder = response
             serverOrder.forEach(elementOrder => {
@@ -471,17 +474,19 @@ class Manage extends Component {
             toast.error('Could not connect to server. Please try again later.')
         })
 
-        let source = new EventSource(`http://${window.location.host}/api/get_latest_order`);
-        // let source = new EventSource(`http://127.0.0.1:8000/api/get_latest_order`);
+        // let source = new EventSource(`http://${window.location.host}/api/get_latest_order`);
+        let source = new EventSource(`http://127.0.0.1:8000/api/get_latest_order`);
         source.onmessage = e => {
             console.log(e)
             var data = JSON.parse(e.data)
             if (data === -1) {
                 window.location.reload()
+                //(this.landed === true && 
             } else if (this.landed === true && data !== -1) {
                 const order_added = this.orderData(data, true)
+                console.log('Order Added', order_added)
                 if (order_added) {
-                    console.log(data, data.order.id)
+                    console.log('play sound if')
                     toast.info('NEW ORDER # ' + data.order.id)
                     this.soundPlay()
                 }
