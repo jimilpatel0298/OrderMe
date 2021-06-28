@@ -404,7 +404,7 @@ class Manage extends Component {
             let newOrder = { ...response }
             const exists =  ordersTemp.some(el => el.order.id === newOrder.order.id)
             console.log(exists)
-            if (!exists) {
+            if (!exists && (newOrder.order.status !== 'cancelled' && newOrder.order.status !== 'dispatched')) {
                 ordersTemp.unshift(newOrder)
             } else {
                 return false
@@ -479,16 +479,22 @@ class Manage extends Component {
             if (data === -1) {
                 window.location.reload()
             } else if (this.landed === true && data !== -1) {
-                const found = this.orderData(data, true)
-                if (!found) {
+                const order_added = this.orderData(data, true)
+                if (order_added) {
+                    console.log(data, data.order.id)
+                    toast.info('NEW ORDER # ' + data.order.id)
                     this.soundPlay()
                 }
+            }
+            if (this.landed === false) {
+                toast.success('Connection Established')
             }
             this.landed = true;
         }
         source.onerror = e => {
             console.log('event source error', e)
             toast.error('Could not connect to server. Please try again later.')
+            window.location.reload()
         }
 
     }
