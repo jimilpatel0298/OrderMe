@@ -402,7 +402,13 @@ class Manage extends Component {
 
         if (single === true) {
             let newOrder = { ...response }
-            ordersTemp.unshift(newOrder)
+            const exists =  ordersTemp.some(el => el.order.id === newOrder.order.id)
+            console.log(exists)
+            if (!exists) {
+                ordersTemp.unshift(newOrder)
+            } else {
+                return false
+            }
 
         } else {
             let serverOrder = response
@@ -450,6 +456,7 @@ class Manage extends Component {
             });
         }
         this.setState({ orders: ordersTemp })
+        return true
     }
 
     landed = false;
@@ -472,8 +479,10 @@ class Manage extends Component {
             if (data === -1) {
                 window.location.reload()
             } else if (this.landed === true && data !== -1) {
-                this.orderData(JSON.parse(e.data), true)
-                this.soundPlay()
+                const found = this.orderData(data, true)
+                if (!found) {
+                    this.soundPlay()
+                }
             }
             this.landed = true;
         }
