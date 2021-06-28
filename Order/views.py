@@ -218,9 +218,9 @@ def event_stream():
     order_id_number = 0
 
     try:
-        # print(manage_toggle)
-        # print(order_id_number)
-        # print(initial_data)
+        print(manage_toggle)
+        print(order_id_number)
+        print(initial_data)
         if manage_toggle == False:
             json_string = json.dumps(-1)
             data = json_string
@@ -239,7 +239,6 @@ def event_stream():
                 print('inside 1st if')
                 if order_id_number == 0 or order_id_number != newOrder:
                     print('inside 2nd if')
-                    order_id_number = newOrder
                     dataObj = {
                         'contactDetails': {},
                         'order': {},
@@ -255,9 +254,12 @@ def event_stream():
                         'paidStatus': orderObj.paid_status
                     }
 
-                    if dataObj['order']['status'] == 'paid' or dataObj['order']['status'] == 'cancelled' or dataObj['order']['status'] == 'dispatched' or dataObj['order']['status'] == 'prepared' or dataObj['order']['status'] == 'paylater':
-                        time.sleep(1)
-                        continue
+                    # if order_id_number == 0:
+                    #     if dataObj['order']['status'] == 'paid' or dataObj['order']['status'] == 'cancelled' or dataObj['order']['status'] == 'dispatched' or dataObj['order']['status'] == 'prepared' or dataObj['order']['status'] == 'paylater':
+                    #         time.sleep(1)
+                    #     continue
+
+                    order_id_number = newOrder
 
                     personObj = Person.objects.get(id=orderObj.person.id)
                     orderItems = OrderItem.objects.filter(order=orderObj)
