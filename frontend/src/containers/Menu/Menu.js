@@ -4,6 +4,9 @@ import Category from '../../components/MenuItem/Category'
 import Customization from '../../components/Modal/Customization/Customization'
 import axios from 'axios'
 import { toast } from 'react-toastify'
+import Header from '../../components/Header/Header'
+import {Container} from 'react-bootstrap'
+
 
 class Menu extends Component {
     // constructor(props) {
@@ -78,6 +81,9 @@ class Menu extends Component {
         }).catch(error => {
             toast.error('Could not connect to server. Please try again!')
         })
+        window.scroll({ top: 0, left: 0, behavior: 'smooth' });
+        // let scale = 'scale(1)';
+        // document.body.style.webkitTransform =  scale;
     }
 
     modalInfo = null;
@@ -101,9 +107,19 @@ class Menu extends Component {
         return menu_items
     }
 
+    menuClicked = (id=null) => {
+        console.log('clicked')
+        if (id != null) {
+            const section = document.querySelector( '#' + id );
+            section.scrollIntoView( { behavior: 'smooth', block: 'start' } );
+        }
+    }
+
     render() {
         return (
             <Auxiliary>
+            <Header title='menu' menuClicked={this.menuClicked} menuItems={this.state.menuItems}/>
+            <Container as='div' style={{maxWidth: '540px'}}>
                 {
                     (this.state.menuItems.length !==0 ) ? this.displayMenu() : <h5 className='text-center' style={{ fontStyle: 'italic'}}>Loading... Please wait!</h5>
                 }
@@ -117,6 +133,7 @@ class Menu extends Component {
                         }}
                         itemCancelHandler={this.itemCancelHandler} /> : null
                 }
+                </Container>
             </Auxiliary>
         );
     }

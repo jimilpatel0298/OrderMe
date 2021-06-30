@@ -1,3 +1,6 @@
+html {
+    /* scroll-behavior: smooth; */
+}
 body {
     margin: 0;
     font-family: 'Raleway', sans-serif;
@@ -175,12 +178,15 @@ main {
 
 .img-logo {
     width: 130px;
+    height: 40px;
+    object-fit: contain;
 }
 
 .navbar {
     padding: 10px !important;
     margin: auto;
     height: 60px;
+    /* align-items: flex-start !important; */
 }
 
 .navbar .container {
@@ -226,4 +232,34 @@ footer {
 label {
     color: black !important;
     font-weight: 300;
+}
+
+.dropdown-item {
+    text-align: center !important;
+    padding: 10px 0;
+}
+
+.dropdown-menu {
+    min-width: 0rem;
+    padding: 1rem 1.25rem;
+    border: none;
+    box-shadow: 0px 1px 5px lightgray;
+    font-size: 1rem;
+    text-transform: capitalize;
+    border-radius: 13px 0px 13px 13px;
+}
+
+.menu-span {
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 1px;
+    color: #1e0000 !important;
+    font-size: 14px;
+    font-weight: 400;
+    margin: 0px;
+    padding: 0px;
+    cursor: pointer;
+}
+
+.navbar-nav .dropdown-menu {
+    position: static !important;
 }

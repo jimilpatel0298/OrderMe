@@ -320,7 +320,9 @@ class Manage extends Component {
     confirmHandler = (event, orderTemp) => {
         let ordersTemp = [...this.state.orders]
         const elementIndex = this.state.orders.findIndex(element => element.order.id === orderTemp.data.order.id)
-        ordersTemp[elementIndex].order.status = orderTemp.messages.title.toLowerCase()
+        if (ordersTemp[elementIndex].order.status !== 'prepared') {
+            ordersTemp[elementIndex].order.status = orderTemp.messages.title.toLowerCase()
+        }
         
         if(orderTemp.paidBtn === true) {
             ordersTemp[elementIndex].order.paidStatus = true
