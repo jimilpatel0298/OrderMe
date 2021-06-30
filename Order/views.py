@@ -227,7 +227,7 @@ def event_stream():
             if not initial_data == data:
                 yield "\ndata: {}\n\n".format(data)
                 initial_data = data
-            time.sleep(1)
+            time.sleep(2)
 
         while manage_toggle:
             def toDict(obj):
@@ -298,9 +298,9 @@ def event_stream():
                     if not initial_data == data:
                         yield "\ndata: {}\n\n".format(data)
                         initial_data = data
-                    time.sleep(1)
+                    time.sleep(2)
                 else:
-                    time.sleep(1)
+                    time.sleep(2)
                     continue
             else:
                 json_string = json.dumps({'data': 0})
@@ -308,7 +308,7 @@ def event_stream():
                 if not initial_data == data:
                     yield "\ndata: {}\n\n".format(data)
                     initial_data = data
-                time.sleep(1)
+                time.sleep(2)
 
     except Exception as e:
         print('exception of while', e)
@@ -339,24 +339,29 @@ def update_order_status(request, order_id):
                 data={"status": "Error", "message": "Order Not Found", "data": {"error": str(e)}},
                 status=HTTP_404_NOT_FOUND)
 
-        serializer = OrderUpdateSerializer(order, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            if request.data['status'] == 'paid':
-                order.paid_status = True
-                order.save()
-            elif request.data['status'] == 'paylater':
-                order.paid_status = False
-                order.save()
-            elif request.data['status'] == 'cancelled':
-                order.paid_status = False
-                order.save()
-            elif request.data['status'] == 'dispatched':
-                # order.paid_status = True
-                order.complete_status = True
-                order.dispatched_status = True
-                order.save()
-            return Response(data={'message': 'Status Updated!', 'order': serializer.data}, status=HTTP_200_OK)
+        if order.status != 'prepared' or request.data['status'] != 'paid':
+            serializer = OrderUpdateSerializer(order, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                order_status = serializer.data
+        else:
+            order_status = {'status': 'prepared'}
+
+        if request.data['status'] == 'paid':
+            order.paid_status = True
+            order.save()
+        elif request.data['status'] == 'paylater':
+            order.paid_status = False
+            order.save()
+        elif request.data['status'] == 'cancelled':
+            order.paid_status = False
+            order.save()
+        elif request.data['status'] == 'dispatched':
+            # order.paid_status = True
+            order.complete_status = True
+            order.dispatched_status = True
+            order.save()
+        return Response(data={'message': 'Status Updated!', 'order': order_status}, status=HTTP_200_OK)
 
 
 def handler_404(request, exception):

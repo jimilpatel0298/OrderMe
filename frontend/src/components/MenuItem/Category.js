@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import MenuItem from './MenuItem';
 
 const Category = (props) => {
     // display category title and its respective items 
+    let str = props.title
+    str = str.replace(/\s+/g, '-');
     return (
-        <div>
+        <div id={str}>
             <h4 className='title-sticky'>{props.title}</h4>
             {
                 props.items.map((item, i) => {

@@ -37,6 +37,8 @@ function App(props) {
           console.log(error)
           // toast.error('Could not connect to server. Please try again!')
         })
+        // let scale = 'scale(1)';
+        // document.body.style.webkitTransform =  scale;
   }, []);
 
   const [isNull, setIsNull] = useState(0) 
@@ -346,9 +348,8 @@ function App(props) {
         <main className='app-body'>
           <Switch>
             <Route path={props.match.url} exact>
-              <Header title='menu'/>
-              <Container as='div' style={{maxWidth: '540px'}}>
               <Menu addToCart={addToCart} />
+              <Container>
               <Link to='/cart'>
                 <div className='icon-wrapper'>
                   <i className='fas fa-shopping-cart fa-3x cart'></i>
