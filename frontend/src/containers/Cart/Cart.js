@@ -77,7 +77,7 @@ const Cart = (props) => {
                                 </Form.Group>
                         </div>
                         <div className='div-place-order'>
-                            <Button type='submit' className='btn-place-order'>Place Order</Button>
+                            <Button type='submit' className='btn-place-order' disabled={props.placeOrderBtn} id='btn-place-order'>Place Order</Button>
                         </div>
                         </Form>
                         </Auxiliary>)

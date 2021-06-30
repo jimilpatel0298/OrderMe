@@ -27,6 +27,8 @@ function App(props) {
 
   const [day, setDay] = useState(null)
 
+  const [placeOrderBtn, setPlaceOrderBtn] = useState(false)
+
   useEffect(() => {
     axios.get('day')
         .then(response => {
@@ -255,19 +257,23 @@ function App(props) {
       setNullIndex(0)
       setKidArray([])
       setValidated(false);
+      setPlaceOrderBtn(false)
       props.history.replace('/order');
     }).catch(error => {
       console.log(error)
+      setPlaceOrderBtn(false)
       toast.error('Could not connect to server. Please try again!')
     })
   }
 
   const placeOrder = (event) => {
     const form = event.currentTarget;
+    setPlaceOrderBtn(true)
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
       setValidated(true);
+      setPlaceOrderBtn(false)
     } else {
       event.preventDefault();
       event.stopPropagation();
@@ -368,7 +374,8 @@ function App(props) {
                 phoneHandler={phoneHandler}
                 placeOrder={placeOrder}
                 validated={validated}
-                clearCart={clearCart} />
+                clearCart={clearCart} 
+                placeOrderBtn={placeOrderBtn}/>
               <Link to='/'>
                 <div className='icon-wrapper'>
                   <i className='fas fa-bars fa-3x cart'></i>
