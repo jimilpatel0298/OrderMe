@@ -8,10 +8,11 @@ import axios from 'axios'
 import { Container } from 'react-bootstrap'
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import smoothscroll from 'smoothscroll-polyfill';
 
 const Start = () => {
     let url = window.location.host
-    // let url = '127.0.0.1:8000'
+    // let url = '192.168.29.220:8000'
     axios.defaults.baseURL = 'http://' + url + '/api/'
     
     const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -21,6 +22,9 @@ const Start = () => {
         let value = event.target.value
         setPinInput(value)
     }
+ 
+    // kick off the polyfill!
+    smoothscroll.polyfill();
     
     const checkPin = () => {
         console.log('inside check pin')

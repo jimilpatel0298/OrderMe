@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { Row, Col, Button, Form } from 'react-bootstrap'
 import CartItem from '../../components/CartItem/CartItem'
 import Auxiliary from '../../hoc/Auxiliary'
@@ -15,6 +15,12 @@ const Cart = (props) => {
             return <CartItem object={cartItem} key={cartItem.kid} clearCart={props.clearCart}/>
         })
     }
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+        // let scale = 'scale(1)';
+        // document.body.style.webkitTransform =  scale;
+      }, [])
 
     return (
         <Auxiliary>
